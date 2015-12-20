@@ -4,6 +4,15 @@
 * Relationships always have a type
 * Relationships can have properties
 
+## docker
+https://hub.docker.com/r/neo4j/neo4j/
+Run neo4j using docker (http://neo4j.com/developer/docker/)
+
+### interactive with terminal
+docker run --interactive --rm --publish 7474:7474 --volume $HOME/neo4j/data:/data neo4j
+
+### as daemon running in the background
+docker run --detach --name neo4j --publish 7474:7474 --volume $HOME/neo4j/data:/data neo4j
 
 ## Cypher
 
