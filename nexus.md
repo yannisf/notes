@@ -1,6 +1,5 @@
 # Sonatype Nexus
-Maven artifact repository manager
-http://www.sonatype.com/nexus/solution-overview/nexus-repository
+[Maven artifact repository manager](http://www.sonatype.com/nexus/solution-overview/nexus-repository)
 
 ## docker
 * https://hub.docker.com/r/sonatype/nexus/
@@ -17,6 +16,7 @@ docker stop nexus
 ```
 
 ## settings.xml
+```
 <settings>
   <mirrors>
     <mirror>
@@ -54,4 +54,27 @@ docker stop nexus
     <activeProfile>nexus</activeProfile>
   </activeProfiles>
 </settings>
+```
+
+## Deploy third party artifacts on nexus
+```
+mvn deploy:deploy-file \
+    -Dfile=artifact.jar \
+    -DgroupId=com.google.code \
+    -DartifactId=kaptcha \
+    -Dversion=2.3 \
+    -Dpackaging=jar \
+    -Durl=http://localhost:8081/content/repositories/thirdparty \
+    -DrepositoryId=thirdparty
+```
+**Note**: In your ``settings.xml`` it is expected to have configured the repository like so:
+ ```
+<servers>
+    <server>
+        <id>thirdparty</id>
+        <username>admin</username>
+        <password>admin123</password>
+    </server>
+</servers>
+ ...
 

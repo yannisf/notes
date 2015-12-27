@@ -20,14 +20,10 @@ docker run hello-world
 ```
 
 ## Images
-```
-docker images
-```
+``docker images``
 
 ### Pull image
-```
-docker pull mysql
-```
+``docker pull mysql``
 
 ## Dockerfile
 Dockerfiles contain instructions for inheriting from an existing image, where you can then add software or customize configurations.
@@ -38,10 +34,10 @@ RUN echo America/New_York | tee /etc/timezone && dpkg-reconfigure --frontend non
 ```
 
 ## Run a docker image
-docker run --name container_name -p 3306:3306 -d image_name
+``docker run --name container_name -p 3306:3306 -d image_name``
 
 ## Remove a docker image
-docker rmi image_name
+``docker rmi image_name``
 
 ## Show docker containers
 Active containers: ``docker ps``
@@ -56,7 +52,9 @@ docker rm container_name
 ```
 
 ## Obtain shell
+```
 docker exec -it container_name bash
+```
 
 ## Oracle XE 11g
 
