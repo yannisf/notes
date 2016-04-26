@@ -1,4 +1,4 @@
-* To serialize hibenate proxied values:
+# To serialize hibenate proxied values:
 1. Add this dependency:
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -10,7 +10,7 @@
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Hibernate4Module());
 
-* To support filters:
+# To support filters:
 1. Add @JsonFilter('filterId') to the class you want to serialize
 2.
   a. When using ObjectMapper apply the filter
@@ -21,4 +21,6 @@
         mappingJacksonValue.setFilters(filters);
 
         return mappingJacksonValue;
+
+# To support views:
 
