@@ -7,6 +7,7 @@
 sudo mount -t cifs -o username=admin,uid=200 //smbserver/nexus /var/nexus
 docker run -d -p 8081:8081 --name nexus -v  /var/nexus:/sonatype-work sonatype/nexus
 ```
+
 Nexus should be available at `http://localhost:8081`
 
 From there on just:
