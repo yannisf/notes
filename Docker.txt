@@ -1,0 +1,277 @@
+= Docker
+
+The kernel features that enabled Docker are:
+
+* **Namespaces** allow execution isolation
+* **cgroups** (control groups) allow resource limit control
+* **Capabilities** allow permission management (deny all by default)
+
+Docker needs an _execution driver_. The execution driver is the interface with the kernel features Docker requires, that is _namespaces_, _cgroups_, _capabilities_. _LXC_ was the initial execution driver but now _libcontainer_ is used, that is owned and controlled by Docker and may be installed in Windows as well. The _Docker engine_ that consisted of a _client_ and a _daemon_.
+
+== Starting with docker
+
+=== Installing
+----
+$ apt-get install -y docker.io
+$ service docker.io status
+----
+
+=== Checking installation
+----
+$ docker -v <1>
+$ docker version <2>
+$ docker info <3>
+$ docker run hello-world <4>
+----
+<1> the docker client asking the docker daemon for the version
+<2> more detail
+<3> information on the docker installation, images, etc
+<4> runs a sample container
+
+=== Updating
+----
+$ wget -qO- https://get.docker.com/gpg | apt-key add - <1>
+$ echo deb http://get.docker.com/ubuntu docker main > /etc/apt/sources.list.d/docker.list <2>
+$ apt-get update <3>
+$ apt-get install lxc-docker <4>
+----
+<1> install the key
+<2> add the repo
+<3> update packages
+<4> install docker package
+
+=== Running containers
+
+.Run a container based on ubuntu interactively
+----
+$ docker run -it ubuntu /bin/bash
+----
+* `run`: starts a new container
+* `-it`: make it interactive, assign a tty
+* `ubuntu`: base it on the ubuntu image
+* `/bin/bash`: inside the container launch the bash process
+
+CAUTION: Issuing `exit`, or entering `ctrl+d` will terminate the container.
+
+.Run a container based on ubuntu interactively
+
+----
+docker run --name $given_container_name -p 3306:3306 -d image_name
+----
+
+* `--name $given_container_name: name the container
+* `-d`: detached
+* `-p 3306:3306`: map network port from host to container
+
+.Example: run a short lived command in detached mode
+----
+$ docker run ubuntu /bin/bash -c "echo 'cool content' > /tmp/cool-file"
+----
+
+.Example: execute a command in a running container
+----
+$ docker exec -it $image_name /bin/bash <1>
+$ docker exec -d $image_name touch /tmp/log <1>
+----
+<1> Executes interactively a shell in a running container with name `$image_name`
+<2> Creates a file, detached, in a running container
+
+==== Running a container from a network port
+
+In the previous example the container was started using the local socket. To launch a container from a network socket, the docker daemon must be stopped and restarted to listen on a network port.
+
+----
+$ service docker stop
+$ docker -H 192.168.1.3:55555 -d &
+----
+
+* `-H host:port`: The host and port to start docker
+* `-d`: daemonize
+* `&`: Get the terminal back
+
+.Useful commands
+----
+$ netsta5 -t4lp <1>
+$ docker info <2>
+$ export DOCKER_HOST="tcp://192.168.1.3:55555" <3>
+$ docker info <4>
+----
+<1> check that docker listens
+<2> returns an error, since by default docker used the local socket
+<3> set the environment variable
+<4> now it works! (check firewalls if it does not)
+
+== Digging into docker
+----
+$ docker ps <1>
+$ docker ps -a <2>
+$ ls -l /var/lib/docker/aufs/diff <3>
+$ ls -l /var/lib/docker/aufs/diff/$hash <4>
+$ docker start $hash <5>
+$ docker attach $hash <6>
+$ docker pull $image_name <7>
+$ docker images $image_name <8>
+$ docker stop $hash <9>
+----
+<1> show running docker containers
+<2> all docker containers on this machine
+<3> the images
+<4> the directory structure of `$hash`
+<5> starts docker container with id `$hash`
+<6> attach on process with PID1 on the running container with id `$hash`
+<7> pulls `$image_name` from docker hub (latest version)
+<8> shows all images for `$image_name` (all versions)
+<9> stops running container `$hash`
+
+TIP: [ctrl] + [p] + [q] exits (detaches from) a container without killing it.
+
+== Registries and repositories
+A Registry (_hub.docker.com_) contains many Repositories (_fedora_, _ubuntu_, _redis_, etc).
+
+== Images
+Images are stacked from more elementary images. For example:
+
+* Base Image
+* Application (e.g redis)
+* Patches
+
+The top layer overrides the previous ones. This is accomplished through union mounts (how to mount multiple file systems on-top of each other). All these layers are mounted as read-only with a top layer as read/write. Only the very top level is writable. The bottom layer is bootfs, that is short lived and no one will ever have to deal with it.
+
+----
+$ docker images
+----
+<1> All locally stored images
+
+== Exporting a docker container
+The procedure in high level steps is:
+. Save the container to a tar file
+. Export it
+. Import it
+
+----
+$ docker commit $hash alias <1>
+$ docker images <2>
+$ docker history alias <3>
+$ docker save -o /tmp/export.tar alias <4>
+$ docker load -i /tmp/export.tar <5>
+$ docker images <6>
+----
+<1> creates a docker images from $hash
+<2> the previously committed image is displayed
+<3> shows the commands that created the image
+<4> exports alias image as tar
+<5> imports it, in another instance
+<6> shows up!
+
+.When the process inside the container exits, so does the container.
+----
+$ docker run -d ubuntu /bin/bash  -c "ping 8.8.8.8 -c 30" <1>
+$ docker top $hash <2>
+$ docker run ubuntu:version <3>
+----
+<1> ping host from an ubuntu based container
+<2> lets us see top running processes into a container
+<3> be explicit!
+
+== docker run
+.Options
+* `-i`: interactive
+* `-t`: assign a tty
+* `-d`: detached
+* `--cpu-shares`: how much CPU (1024 being 100%)
+* `memory`: how much memory to use
+
+.Useful commands on running containers
+----
+$ docker inspect $hash  <1>
+$ docker ps -l <2>
+$ docker rm $hash <3>
+$ docker rm -f $hash <4>
+$ docker log $hash <5>
+----
+<1> get detailed information on the container
+<2> shows the last container to have run
+<3> remove a stopped container
+<4> remove a running container
+<5> what happens in the container
+
+=== Entering a container
+`docker attach`, attaches to PID1 of a running container. If PID1 is not a shell, then attaching wont be of much use. In that case:,
+----
+$ docker inspect $hash | grep Pid <1>
+$ nsenter -m -u -n -p -i -t pid /bin/bash <2>
+$ docker-enter $hash <3>
+$ docker exec -it $hash /bin/bash <4>
+----
+<1> find the PID of the running container
+<2> logs into the container
+<3> same thing as above
+<4> same thing as above
+
+NOTE: Logging out of this container will not stop it!
+
+== Volumes
+.Run a container, mapping a host directory into the container
+----
+$ docker run -v $from_host_dir:$to_guest_dir $image_name
+----
+
+== Dockerfile
+
+A Dockerfile contains simple instructions to create a docker image.
+
+* Plain text
+* Simple format
+* Instructions to build an image
+* All other subdirectories will be included in the build
+----
+$ docker build
+$ docker build -t mytag:version .
+----
+<1> builds an image with instructions from the Dockerfile
+<2> tag and build from local directory
+
+.Sample Dockerfile
+----
+# comment
+FROM image:version
+MAINTAINER email
+RUN runCommand1  # creates a new layer!
+RUN runCommand2  # creates a new layer!
+CMD ["echo", "Hello", "World"]
+----
+
+.Other commands
+* `RUN`: Executes only during build time
+* `CMD`: Executes only during run time and can only be one
+* `EXPOSE`: Exposes a network port
+* `ENTRYPOINT`: The command to run, cannot be overridden and anything appended from the command line is passed as argument
+
+== Futher commands
+----
+$ docker tag $hash repo/$image_name:version <1>
+$ docker push repo/$image_name:version <2>
+$ docker rmi $image_name <3>
+----
+<1> tags `$hash`
+<2> pushes `$image_name` to repository
+<3> removes `$image_name`
+
+== Running Oracle 11g XE in a container
+----
+$ docker pull wnameless/oracle-xe-11g
+$ docker run -d -p 1522:22 -p 1521:1521 wnameless/oracle-xe-11g
+----
+
+.Connect to database
+[horizontal]
+hostname:: localhost
+port:: 1521
+sid:: xe
+username:: system
+password:: oracle
+
+Login with SSH (password: admin)
+----
+ssh root@localhost -p 1522
+----
