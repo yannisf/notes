@@ -143,7 +143,9 @@ $ docker images
 <1> All locally stored images
 
 == Exporting a docker container
+
 The procedure in high level steps is:
+
 . Save the container to a tar file
 . Export it
 . Import it
