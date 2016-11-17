@@ -1,0 +1,35 @@
+== SchemaSpy
+
+SchemaSpy is a tool to generate database schema reports.
+
+=== Prerequisites
+* JDBC driver for the database
+* http://graphviz.org/[Graphviz] (the dot executable should be in path)
+* http://schemaspy.sourceforge.net/[SchemaSpy]
+
+=== Report generations
+Create a properties file to capture your database information.
+
+.Sample file: orathin_ta.properties
+----
+extends=ora <1>
+driverPath=ojdbc7.jar <2>
+connectionSpec=jdbc:oracle:thin:@172.17.52.164:1521/TEXT_ANALYTICS <3>
+----
+<1> The database type you extend
+<2> The JDBC driver path. Here, it is assumed that the driver exists in the same directory with the properties file.
+<3> The JDBC url
+
+.Execution
+----
+java -jar schemaSpy_5.0.0.jar -o ta -t orathin_ta.properties <1> -u TA_TEST -p TA_TEST -norows
+----
+
+Obviously:
+
+* `java` should be in your path
+* `schemaSpy_5.0.0.jar` is in the current directory
+* *-o* defines the output directory
+* *-u* the username to connect to the database
+* *-p* the password to connect to the database
+* *-norow* skip row information, and stick to bare schema
