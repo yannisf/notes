@@ -12,5 +12,11 @@ Keys should be generated on your secure machine and not on the machine you inten
 The private key should remain safe and secure on your client. The public key should be moved to the `.ssh` directory of the remote server accounts you want to log in using key authentication. The public key should be registered to the servers:
 
 ----
-cat id_rsa.pub >> authorized_keys
+# cat id_rsa.pub >> authorized_keys
+----
+
+=== Execute command on remote system
+
+----
+# ssh remote_system "command"
 ----
