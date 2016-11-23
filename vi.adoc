@@ -1,0 +1,20 @@
+== vi
+
+=== multiple windows
+
+:split filename  - split window and load another file
+:vsplit file     - vertical split
+:hide            - close current window
+:only            - keep only this window open
+
+=== vimdiff
+----
+vimdiff file1 file2
+----
+
+* Ctrl+w Ctrl+w: Switch from window to window
+* do: get changes
+* dp: put changes
+* ]c: next change
+* [c: previous change
+
