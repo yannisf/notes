@@ -3,23 +3,48 @@
 === Generate keys
 Keys should be generated on your secure machine and not on the machine you intend to install the public key on.
 
-----
-# mkdir ~/.ssh
-# chmod 700 ~/.ssh
-# ssh-keygen -t rsa
-----
+[source, bash]
+$ mkdir ~/.ssh
+$ chmod 700 ~/.ssh
+$ ssh-keygen -t rsa
 
-The private key should remain safe and secure on your client. The public key should be moved to the `.ssh` directory of the remote server accounts you want to log in using key authentication. The public key should be registered to the servers:
+The private key should remain safe and secure on your client host. The public key should be moved to the `.ssh` directory of the remote host account you want to log in using key authentication.
 
-----
-# cat id_rsa.pub >> authorized_keys
-----
+.Register key to remote host
 
-=== Execute command on remote system
+[source, bash]
+$ cat id_rsa.pub >> authorized_keys
 
+=== Executing a command on the remote system
+
+[source, bash]
+$ ssh host "command"
+
+=== Local port forwarding
 ----
-# ssh remote_system "command"
+$ ssh -L 8000:localhost:80 host <1>
+$ ssh -L 8000:otherhost:80 host <2>
 ----
+<1> When connecting to localhost:8000 you will get host:80 as if connecting from host
+<2> When connecting to localhost:8000 you will get otherhost:80 as if connecting from host
+
+TIP: It is worth noting, that local port forwarding, always opens a port in localhost and obviously you need ssh access to the host in order for the tunnel to be established.
+
+=== Remote port forwarding
+----
+$ ssh -R 8000:localhost:80 host <1>
+$ ssh -R 8000:otherhost:80 host <2>
+----
+<1> When connecting to host:8000 you will get localhost:80
+<2> When connecting to host:8000 you will get otherhost:80 as if connecting from localhost
+
+NOTE: The host your are connecting to (host) will need to have `GatewayPorts yes` in its `/etc/ssh/sshd_config`.
+
+=== Dynamic forwarding
+----
+$ ssh -D 1080 host <1>
+----
+<1> Establishes a secure connection with host. In your proxy settings, define localhost:1080 as a SOCKS proxy. Any network requests will be served through this proxy.
 
 === ssh-agent
 Its role it twofold. First, it caches your keys enabling you to provide the passphrase just once. Second, it allows you to forward your private key to a second server (more on this later). If ssh-agent is not already running, there are two options to start it:
@@ -40,7 +65,7 @@ $ ssh-add ~/.ssh/id_rsa
 
 TIP: ~/.ssh/id_rsa is one of the default keys that `ssh-add` will look for, so it is not necessary to provide this information.
 
-=== Forwarding
+=== ForwardAgent
 Lets assume that you want to log in _host c_ from _host a_. To log in _host c_ you have to use _host b_ as a jumphost. In host A, private and public keys exist. and host b and c are configured to accept your keys. This will require you first to log in _host b_ and then _host c_. And this requires having your private key not just in host a, but in host b as well.
 
 Using forwarding this can be avoided. Just login in host c like so:
@@ -56,23 +81,20 @@ Host hostB
   ForwardAgent yes
 ----
 
-=== Establishing a connection from *host a* to *host c* via *host b*
-This functionality builds ontop ssh-agent and forwarding introduced previously and depends on configuring the `.ssh/config` appropriately. It assumes ssh-agent is running in *host a*, the key has been made known using `ssh-add`, the user key installed in *host a* is accepted in *host b* and *host c*, and forwarding is enabled.
+WARNING: Using `ForwardAgent` possibly opens a back door in the host you are login in and if possible should be avoided. The `ProxyCommand` that will be presented in a following section is considered a safer option.
+
+=== ProxyCommand
+Lets assume that you want to establish a connection from *host a* to *host c* via *host b*. This functionality is better realized through configuration. It assumes that the user key that has been installed in *host a* is accepted in *host b* and *host c*.
 
 .~/.ssh/config
 ----
-Host hostB <1>
-  ForwardAgent yes <2>
-
-Host c_via_b <3>
-  HostName hostC <4>
-  ProxyCommand ssh hostC -W %h:%p <5>
+Host c_via_b <1>
+  HostName hostC <2>
+  ProxyCommand ssh hostB -W %h:%p <3>
 ----
-<1> Configures hostB. Since a `HostName` attribute does not exist within the block, hostB is the host address.
-<2> Enables forwarding for hostB
-<3> Configures c_via_b
-<4> Defines the target host
-<5> Uses `ProxyCommand` to reach hostB
+<1> Configures c_via_b
+<2> Defines the target host
+<3> Uses `ProxyCommand` to reach hostC through hostB
 
 Log in *host C* via *host B*
 [source, bash]
