@@ -1,0 +1,24 @@
+== OpenVPN
+
+=== Installation
+. apt-get install openvpn
+. From the server run:
++
+----
+# openvpn --dev tun1 --ifconfig 10.9.8.1 10.9.8.2
+----
+. From the client run
++
+----
+openvpn --remote SERVER_IP --dev tun1 --ifconfig 10.9.8.2 10.9.8.1
+----
+
+It should work!
+
+=== systemd
+From Debian Jessie and onwards, systemd is used to initialize the system. In order to start the `tun0` configuration, you should:
+----
+systemctl start openvpn@tun0.service
+----
+
+After that, there is a configuration file in `/etc/default/openvpn` where the server configurations can be managed.

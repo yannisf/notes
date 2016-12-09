@@ -1,0 +1,6 @@
+== Network commands
+
+.Show all listening tcp4 connections without resolving hostnames
+----
+netstat -lnt4
+----

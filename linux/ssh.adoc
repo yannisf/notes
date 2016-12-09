@@ -1,0 +1,81 @@
+== SSH
+
+=== Generate keys
+Keys should be generated on your secure machine and not on the machine you intend to install the public key on.
+
+----
+# mkdir ~/.ssh
+# chmod 700 ~/.ssh
+# ssh-keygen -t rsa
+----
+
+The private key should remain safe and secure on your client. The public key should be moved to the `.ssh` directory of the remote server accounts you want to log in using key authentication. The public key should be registered to the servers:
+
+----
+# cat id_rsa.pub >> authorized_keys
+----
+
+=== Execute command on remote system
+
+----
+# ssh remote_system "command"
+----
+
+=== ssh-agent
+Its role it twofold. First, it caches your keys enabling you to provide the passphrase just once. Second, it allows you to forward your private key to a second server (more on this later). If ssh-agent is not already running, there are two options to start it:
+
+.Launching a new shell from within ssh-agent
+[source, bash]
+$ ssh-agent bash
+
+This will launch a new shell which the agent environment set.
+
+.Merging the appropriate environment variables to the current shell
+[source, bash]
+$ eval `ssh-agent -s`
+
+After that, keys should be added to the like so:
+[source, bash]
+$ ssh-add ~/.ssh/id_rsa
+
+TIP: ~/.ssh/id_rsa is one of the default keys that `ssh-add` will look for, so it is not necessary to provide this information.
+
+=== Forwarding
+Lets assume that you want to log in _host c_ from _host a_. To log in _host c_ you have to use _host b_ as a jumphost. In host A, private and public keys exist. and host b and c are configured to accept your keys. This will require you first to log in _host b_ and then _host c_. And this requires having your private key not just in host a, but in host b as well.
+
+Using forwarding this can be avoided. Just login in host c like so:
+[source, bash]
+$ ssh -A hostB
+$ ssh hostC
+
+NOTE: ssh-agent must be running in host a for forwarding to work, and daemons must be configured appropriately.
+
+TIP: The -A parameter can be skipped if `.ssh/config` is configured like so:
+----
+Host hostB
+  ForwardAgent yes
+----
+
+=== Establishing a connection from *host a* to *host c* via *host b*
+This functionality builds ontop ssh-agent and forwarding introduced previously and depends on configuring the `.ssh/config` appropriately. It assumes ssh-agent is running in *host a*, the key has been made known using `ssh-add`, the user key installed in *host a* is accepted in *host b* and *host c*, and forwarding is enabled.
+
+.~/.ssh/config
+----
+Host hostB <1>
+  ForwardAgent yes <2>
+
+Host c_via_b <3>
+  HostName hostC <4>
+  ProxyCommand ssh hostC -W %h:%p <5>
+----
+<1> Configures hostB. Since a `HostName` attribute does not exist within the block, hostB is the host address.
+<2> Enables forwarding for hostB
+<3> Configures c_via_b
+<4> Defines the target host
+<5> Uses `ProxyCommand` to reach hostB
+
+Log in *host C* via *host B*
+[source, bash]
+$ ssh c_via_b
+
+TIP: Intermediate hosts can be added at will!

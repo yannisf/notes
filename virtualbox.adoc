@@ -1,0 +1,10 @@
+== VirtualBox
+
+=== Headless mode
+----
+# VBoxHeadless --startvm "CentOS 6.8"
+----
+Or to put it as well in the background:
+----
+# VBoxManage startvm "CentOS 6.8" --type headless
+----

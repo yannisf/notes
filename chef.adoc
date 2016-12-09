@@ -1,0 +1,9 @@
+== Chef
+
+=== Using chef-server
+[horizontal]
+Chef workstation:: Where chef code is authored, and then uploaded to chef server
+Chef server:: Where chef code is uploaded and disseminated to chef nodes
+Chef node:: Has its configuration managed by Chef, through the chef-server
+
+The `knife` command enables you to communicate with the Chef server from your workstation.
