@@ -101,3 +101,10 @@ Log in *host C* via *host B*
 $ ssh c_via_b
 
 TIP: Intermediate hosts can be added at will!
+
+== Resources
+* https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Proxies_and_Jump_Hosts
+* https://developer.github.com/guides/using-ssh-agent-forwarding
+* http://www.unixwiz.net/techtips/ssh-agent-forwarding.html
+* https://heipei.github.io/2015/02/26/SSH-Agent-Forwarding-considered-harmful
+* http://blog.trackets.com/2014/05/17/ssh-tunnel-local-and-remote-port-forwarding-explained-with-examples.html
