@@ -1,0 +1,18 @@
+== bash
+
+=== Shell modes
+A *login shell* is one whose first character of argument zero is a -, or one started with the --login option. An *interactive shell* is  one started without non-option arguments and without the -c option
+
+==== Interactive login shell files
+.Login
+. /etc/profile
+. ~/.bash_profile
+. ~/.bash_login
+. ~/.profile
+
+.Logout
+. ~/.bash_logout
+
+==== Interactive non login shell files
+. /etc/bash.bashrc
+. ~/.bashrc
