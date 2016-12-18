@@ -1,0 +1,16 @@
+== iptables
+
+=== Concepts
+
+* tables: nat, filter, mangle
+* chains: applied on hooks: INPUT, OUTPUT, FORWARD, PREROUTING, POSTROUTING
+* targets: action to take: ACCEPT, DROP, SNAT, DNAT, MASQUARADE etc
+* matches: some are always there, eg source or destination address, some are provided by extensions, eg mac
+* rules: one or more match criteria
+
+
+=== Resources
+* http://www.thegeekstuff.com/2011/06/iptables-rules-examples
+* https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands
+* http://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/
+* https://www.cyberciti.biz/tips/linux-iptables-examples.html

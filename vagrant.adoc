@@ -1,0 +1,84 @@
+== Vagrant
+Virtual machines, quickly. Requires a hypervisor, such are virtualbox to start with.
+
+Online resource is excellent: https://www.vagrantup.com/docs/
+
+=== Starting up
+
+.Quick setup
+----
+$ vagrant init hashicorp/precise64
+$ vagrant up
+----
+
+.Start from a default Vagrantfile
+----
+vagrant init
+----
+
+.Editing the Vagrantfile
+----
+Vagrant.configure("2") do |config|
+  config.vm.box = "hashicorp/precise64"
+  config.vm.box_version = "1.1.0"
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+end
+----
+
+=== Going forward
+
+.Login using ssh
+----
+$ vagrant ssh
+----
+
+.Synced folders
+From within the vagrant vm, the host directory can be accessed from `/vagrant`
+
+.Provisioning
+Suppose after bringing up the guest, certain routine tasks need to be performed, such as installing a package. This can be achieved through provisioning. Just capture the tasks in a script, e.g. bootstrap.sh and add the following in Vagrantfile.
+----
+Vagrant.configure("2") do |config|
+  config.vm.box = "hashicorp/precise64"
+  config.vm.provision :shell, path: "bootstrap.sh"
+end
+----
+The "provision" line is new, and tells Vagrant to use the shell provisioner to setup the machine, with the bootstrap.sh file. The file path is relative to the location of the project root (where the Vagrantfile is).
+
+To apply this on a running vagrant, execute:
+----
+$ vagrant reload --provision
+----
+
+.Networking
+Typically, ports from within the vagrant guest are not visible in the host. Using port forwarding to enable access to them:
+----
+Vagrant.configure("2") do |config|
+  config.vm.box = "hashicorp/precise64"
+  config.vm.provision :shell, path: "bootstrap.sh"
+  config.vm.network :forwarded_port, guest: 80, host: 4567
+end
+----
+
+.Shares
+----
+$ vagrant login
+$ vagrant share
+----
+
+=== Tearing down
+
+.Suspend
+----
+$ vagrant suspend
+----
+
+.Halt
+----
+$ vagrant halt
+----
+
+.Destroy
+----
+$ vagrant destroy
+----
