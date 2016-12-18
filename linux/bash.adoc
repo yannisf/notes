@@ -1,14 +1,22 @@
 == bash
 
 === Shell modes
-A *login shell* is one whose first character of argument zero is a -, or one started with the --login option. An *interactive shell* is  one started without non-option arguments and without the -c option
+A *login shell* is one whose first character of argument zero is a -, or one started with the --login option. An *interactive shell* is  one started without non-option arguments and without the -c option.
+
+Basically, when login from a tty you get an interactive login shell. When opening a terminal from within X, you get just an interactive shell.
+
+The last type of shell, is the shell you get within a script.
 
 ==== Interactive login shell files
 .Login
 . /etc/profile
++
+_and then, in order of precedence:_
 . ~/.bash_profile
 . ~/.bash_login
 . ~/.profile
++
+_and executes just the first readable one found._
 
 .Logout
 . ~/.bash_logout
@@ -16,3 +24,19 @@ A *login shell* is one whose first character of argument zero is a -, or one sta
 ==== Interactive non login shell files
 . /etc/bash.bashrc
 . ~/.bashrc
+
+=== Command line editing
+
+.Deleting
+[horizontal]
+Delete to end of line:: Ctrl+k
+Delete to start of line:: Ctrl+u
+Delete to start of word:: Ctrl+w
+Delete to end of word:: Alt+d
+
+.Moving
+[horizontal]
+Go to the start:: Ctrl+a
+Go to the end:: Ctrl+e
+Go to next word (forward):: Alt+f
+Go to previous word (backward):: Alt+b
