@@ -1,0 +1,8 @@
+== Notes
+Various notes on technologies, frameworks, tools and day to day hints. Feel free to browse around.
+
+Below an index of the more polished documentation files is provided:
+
+=== Index
+* link:linux/ssh.adoc[ssh]
+* link:linux/docker.adoc[docker]
