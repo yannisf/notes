@@ -46,6 +46,8 @@ $ ssh -D 1080 host <1>
 ----
 <1> Establishes a secure connection with host. In your proxy settings, define localhost:1080 as a SOCKS proxy. Any network requests will be served through this proxy.
 
+TIP: All port forwarding modes open a terminal on the target server. To avoid this, add the `-Nf` switches. To tear down the tunnel the specific ssh process must be found and killed.
+
 === ssh-agent
 Its role it twofold. First, it caches your keys enabling you to provide the passphrase just once. Second, it allows you to forward your private key to a second server (more on this later). If ssh-agent is not already running, there are two options to start it:
 
@@ -101,6 +103,9 @@ Log in *host C* via *host B*
 $ ssh c_via_b
 
 TIP: Intermediate hosts can be added at will!
+
+=== ServerAliveInterval
+When a connection is left idle, it is eligible to closure. This option sends every so many seconds a message to the server to keep the connection alive.
 
 == Resources
 * https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Proxies_and_Jump_Hosts

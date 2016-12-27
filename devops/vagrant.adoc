@@ -17,13 +17,12 @@ vagrant init
 ----
 
 .Editing the Vagrantfile
-----
+[source, ruby]
 Vagrant.configure("2") do |config|
   config.vm.box = "hashicorp/precise64"
   config.vm.box_version = "1.1.0"
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 end
-----
 
 === Going forward
 
@@ -37,12 +36,12 @@ From within the vagrant vm, the host directory can be accessed from `/vagrant`
 
 .Provisioning
 Suppose after bringing up the guest, certain routine tasks need to be performed, such as installing a package. This can be achieved through provisioning. Just capture the tasks in a script, e.g. bootstrap.sh and add the following in Vagrantfile.
-----
+[source, ruby]
 Vagrant.configure("2") do |config|
   config.vm.box = "hashicorp/precise64"
   config.vm.provision :shell, path: "bootstrap.sh"
 end
-----
+
 The "provision" line is new, and tells Vagrant to use the shell provisioner to setup the machine, with the bootstrap.sh file. The file path is relative to the location of the project root (where the Vagrantfile is).
 
 To apply this on a running vagrant, execute:
@@ -50,15 +49,27 @@ To apply this on a running vagrant, execute:
 $ vagrant reload --provision
 ----
 
-.Networking
+=== Networking
 Typically, ports from within the vagrant guest are not visible in the host. Using port forwarding to enable access to them:
-----
+[source, ruby]
 Vagrant.configure("2") do |config|
   config.vm.box = "hashicorp/precise64"
   config.vm.provision :shell, path: "bootstrap.sh"
   config.vm.network :forwarded_port, guest: 80, host: 4567
 end
-----
+
+.Bridged networking
+To enable bridged networking on interface eth0 using a custom MAC use the following:
+
+[source, ruby]
+config.vm.network "public_network", :mac => "000000000003", bridge: "eth0"
+
+And the following is required for the VM to get internet access:
+[source, ruby]
+config.vm.provider "virtualbox" do |v|
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+end
 
 .Shares
 ----

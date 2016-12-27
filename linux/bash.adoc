@@ -1,9 +1,9 @@
 == bash
 
 === Shell modes
-A *login shell* is one whose first character of argument zero is a -, or one started with the --login option. An *interactive shell* is  one started without non-option arguments and without the -c option.
+A *login shell* is one whose first character of argument zero is a `-`, or one started with the `--login` option. An *interactive shell* is  one started without non-option arguments and without the `-c` option.
 
-Basically, when login from a tty you get an interactive login shell. When opening a terminal from within X, you get just an interactive shell.
+Basically, when login from a _tty_ you get an interactive login shell. When opening a terminal from within X, you get just an interactive shell.
 
 The last type of shell, is the shell you get within a script.
 

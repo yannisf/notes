@@ -1,0 +1,105 @@
+== A simple backup strategy
+
+In this article, a simple backup strategy is going to be presented. Files from the local file system are going to be securely copied to a network storage. The solution will use the following:
+
+- ssh
+- rsync
+- cron
+
+=== Introduction
+
+For the purpose of the example, the local system is going to be Linux Mint and the remote a NAS where ssh access is available. Selected folders from the local home are going to be backed up to the network storage, according to a schedule.
+
+==== ssh
+
+For this solution to work, *ssh* access from the local to the remote system using key authentication must be in place. The private key must not be encrypted, as to ensure unattended backups. The procedure of creating and installing the keys in not in this scope of this article, but is summarized in Appendix I.
+
+==== rsync
+
+The solution will use *rsync* to copy the files since this tool has several features that make it an attractive backup tool. It allows recursive copying, while ensuring that the same content is not copied over and over. This effectively ensures that if a backup is interrupted, it can pick up from where it left. Also it ensures, that if no new content has been added, nothing needs to be copied over the network, resulting in extremely speedy operations.
+
+==== cron
+To schedule unattended backups, *cron* is going to be used. The only thing we need to ensure, apart from having setup ssh and have rsync, is that the NAS system is up at the time of running the backup operation.
+
+=== Backing up
+
+As mentioned before, selected directories from the local home are going to be backup. The directories are:
+
+* Desktop
+* Development
+* Documents
+* Music
+* Pictures
+* Public
+* Templates
+* Video
+
+NOTE: The home directory, might include several other directories, but only the above are to be backed up.
+
+==== The command
+
+First the command will presented and executed in a local shell as to ensure its correctness, and then is going to be installed in cron, as to have the unattended backup feature.
+
+[source, bash]
+$ rsync -av -e ssh --delete \ <1>
+>  --exclude='Development/**/node_modules' \ <2>
+>  Desktop Development Documents Music Pictures Public Templates Videos \ <3>
+>  europa:/share/homes/yannis/ianos <4>
+
+NOTE: The multiline command pattern is used to help with readability. The numbers after the `\` are pointers for documentation and should not be included into the command.
+
+<1> Command with basic options
+<2> Exclusions
+<3> Source directories
+<4> Target directory
+
+===== -av
+These switches ensure that rsync is run in archive mode, which effectively means, recursive, preserving privileges, timestamps and links, and requesting to be verbose about it.
+
+===== -e ssh
+Specifies, that the remote shell to use is ssh.
+
+===== --delete
+This switch requests to delete from the destination files that do not exist in the source location. This is of course impossible to occur in the initial backup, but very likely in ensuing backups, where files are deleted from the source directories.
+
+===== --exclude
+This switch takes a pattern as argument, where the user may provide files that do not want to be backed up. Here for example, in the `Development` directory there are several node.js projects, which include several downloaded javascript libraries from the internet. These do not need to be backed up, since they can be fetched again anytime.
+
+The ** within the pattern ensures that whatever the project directory is, and the directories nested within it, directories named `node_modules` will not be backed up.
+
+TIP: Several exclusions may be provided by repeating the --exclude switch with othert patterns.
+
+===== source directories
+The directories that are to be backed up are enumerated here. Since a relative notation is used the script must be run from the home directory in order to find the directories.
+
+===== target directory
+The target here uses a remote ssh notation. The target system is `europa`. If an ssh config file exists, it will be consulted, else it is assumed that europa is locally resolvable and by default the current user will be used to authenticate with.
+
+After the hostname, there is a colon and the full remote path where the backup should be stored.
+
+==== Scheduling the command
+
+While you might have thought that the hard part is done, installing a cron job is not always trivial. There are several things that should be taken into consideration, stemming from the fact that cron runs in a minimal shell, so it is not always predictable what is the environment. To work around this, it is suggested to use full path for the command. So the cron command that is suggested to install is:
+
+[source, bash]
+/usr/bin/rsync -av -e '/usr/bin/ssh -i /home/yannis/.ssh/my_key' --delete \
+> --exclude='**/node_modules' \
+> Desktop Development Documents Music Pictures Public Templates Videos Downloads bin \
+> europa:/share/homes/yannis/ianos
+
+TIP: The full path for rsync, ssh and the key are used. Do not forget to use an unencrypted key. You might want to use a dedicated key just for this operation, as to not expose your primary key.
+
+Next fire up crontab:
+----
+$ crontab -e
+----
+
+And schedule the back to execute daily at say 21:00.
+----
+0 21 * * * /usr/bin/rsync -av -e '/usr/bin/ssh -i /home/yannis/.ssh/my_key' --delete --exclude='**/node_modules' Desktop Development Documents Music Pictures Public Templates Videos Downloads bin europa:/share/homes/yannis/ianos
+----
+
+=== Appendix I
+. Generate the keys in the local system. Do not use a passphrase.
+. Install the public key in the NAS user you want to backup to by adding it to `~/.ssh/authorized_keys`.
+. Create a `~/.ssh/config` to your local system to facilitate configuration, such as where is the remote system and which user to use to connect.

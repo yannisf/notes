@@ -1,0 +1,15 @@
+== ip
+
+Network configuration command
+
+----
+$ ip address show
+$ ip route show
+$ ip neighbor show
+$ sudo ip link set eth0 up
+$ sudo ip address add 192.168.0.5/24 dev eth0
+----
+
+.Switches
+* -4: for IPv4
+* -6: for IPv6
