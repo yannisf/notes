@@ -107,6 +107,29 @@ TIP: Intermediate hosts can be added at will!
 === ServerAliveInterval
 When a connection is left idle, it is eligible to closure. This option sends every so many seconds a message to the server to keep the connection alive.
 
+=== sshfs
+
+It is quite simple to mount a filesystem where you have ssh access.
+
+.Install sshfs
+[source, bash]
+$ sudo apt-get install sshfs
+
+.Add user to fuse group
+[source, bash]
+$ sudo gpasswd -a $USER fuse
+
+TIP: For the new groups to take effect, the user has to login again
+
+.Mount the remote filesystem
+[source, bash]
+$ mkdir -p ~/mount_point <1>
+$ sshfs server:/remote_directory ~/mount_point <2>
+
+.Unmount
+[source, bash]
+$ fusermount -u ~/far_projects
+
 == Resources
 * https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Proxies_and_Jump_Hosts
 * https://developer.github.com/guides/using-ssh-agent-forwarding
