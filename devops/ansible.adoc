@@ -1,0 +1,50 @@
+== Ansible
+
+=== Installation
+
+.Debian
+Add the following line to /etc/apt/sources.list:
+----
+deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main
+----
+
+Then run these commands:
+----
+$ sudo apt-get update
+$ sudo apt-get install ansible
+----
+
+=== Configuration
+
+
+=== Use patterns
+----
+ansible server_or_group -m module_name -a arguments
+----
+
+.Example 1
+----
+ansible server -m ping
+----
+
+.Example 2
+----
+ansible server1:server2 -m ping
+----
+
+
+.Example 3
+----
+ansible pan.fraglab.net -m shell -a 'free -m'
+----
+
+.Example 4
+
+=== Playbooks
+
+.Executing
+----
+$ ansible-playbook playbook.yml
+----
+
+=== Adding a user
