@@ -1,0 +1,21 @@
+== sar
+
+=== Select statistics to review
+By default *sar* open system statistic from the last day. Statistics for each day
+are kept in */var/log/systat* or */var/log/sa* etc. To review statistis for a specific
+day select the respective file using the *-f file* switch. Optionally, use the 
+*-s HH:mm:ss* and *-e HH:mm:ss* to select start and end time within the selected
+day.
+
+----
+# sar -f /var/log/sa/sar29 -s 10:00:00 -e 12:00:00
+----
+
+* -u: CPU
+* -r: RAM
+* -S: swap
+* -b: I/O activities
+* -d: Block device I/O activities
+* -w: Context switches per second
+* -q: Queue and load average
+* -n: Network statistics
