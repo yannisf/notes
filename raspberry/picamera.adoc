@@ -27,3 +27,23 @@ $ nc -l 9898 | mplayer -fps 24 -demuxer h264es -
 * *-fps 24*: frames per second
 * *-demuxer h264es* : demux using h264es
 * *-* : input should be standard input
+
+CAUTION: The stream is encrypted, and possibly anyone in between the Raspbery and the linux host can intercept it (man in the middle).
+
+=== Using encryption
+Using *ssh* facilities, one can encrypt the stream, and as a bonus, control the whole procedure from the linux host without having to log into the Raspberry PI interactively. Additionally, if _ssh key authentication_ is configured, then this is by far the most comfortable way to stream.
+
+----
+$ ssh user@raspberry "raspivid -t 0 -w 1280 -h 720 -rot 180 -fps 24 -o -" | mplayer -fps 24 -demuxer h264es -
+----
+
+Maybe this command requires a little explanation for the new ssh users. The syntax _ssh user@raspberry command_,  invokes *command* at *raspberry* as *user*. The command output will be printed to the standard output of the linux host.
+
+If using as command, *raspivid* with the same parameters used in the previous example, the stream will be output to our standard output. By piping this output to mplayer standard input, you get the same effect of the previous method, but this time encrypted!
+
+[TIP]
+====
+To store the stream as a file too, use *tee*:
+[code, bash]
+$ ssh user@raspberry "raspivid -t 0 -w 1280 -h 720 -rot 180 -fps 24 -o -" | tee stream.h264 | mplayer -fps 24 -demuxer h264es -
+====
