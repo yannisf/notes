@@ -1,0 +1,29 @@
+== PI Camera
+The *PI Camera* is a small hardware module that can be hooked on a Raspberry PI
+
+=== Streaming video
+Using the PI Camera, video can be streamed from the camera to another system through the network.
+
+.On the Raspberry PI
+----
+$ raspivid -t 0 -w 1280 -h 720 -rot 180 -fps 24 -o - | nc 192.168.1.3 9898
+----
+
+* *-t 0* : stream indefinetily
+* *-w 1280* : width of the video will be 1280
+* *-h 720* : height of the video will be 720
+* *-fps* : frames per second
+* *-o -* : output to stdout (don't miss the -)
+
+The standard output of Raspberry PI pipes its output to netcat, which in this case establishes a connection to _192.168.1.1.3_ on port 9898
+
+.On the linux host
+The Linux host must have installed *mplayer* and *netcat* in order to receive and decode the video.
+----
+$ nc -l 9898 | mplayer -fps 24 -demuxer h264es -
+----
+
+* *-l 9898*: listen on port 9898
+* *-fps 24*: frames per second
+* *-demuxer h264es* : demux using h264es
+* *-* : input should be standard input

@@ -59,7 +59,7 @@ CAUTION: Issuing `exit`, or entering `ctrl+d` will terminate the container.
 docker run --name $given_container_name -p 3306:3306 -d image_name
 ----
 
-* `--name $given_container_name: name the container
+* `--name $given_container_name`: name the container
 * `-d`: detached
 * `-p 3306:3306`: map network port from host to container
 
@@ -91,7 +91,7 @@ $ docker -H 192.168.1.3:55555 -d &
 
 .Useful commands
 ----
-$ netsta5 -t4lp <1>
+$ netstat -t4lp <1>
 $ docker info <2>
 $ export DOCKER_HOST="tcp://192.168.1.3:55555" <3>
 $ docker info <4>
@@ -195,7 +195,7 @@ $ docker log $hash <5>
 <2> shows the last container to have run
 <3> remove a stopped container
 <4> remove a running container
-<5> what happens in the container
+<5> what happens in the container (add -f to follow)
 
 === Entering a container
 `docker attach`, attaches to PID1 of a running container. If PID1 is not a shell, then attaching wont be of much use. In that case:,
