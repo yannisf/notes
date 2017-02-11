@@ -16,6 +16,11 @@ $ apt-get install -y docker.io
 $ service docker.io status
 ----
 
+.Alternative installation method
+----
+$ curl https://get.docker.com | sh
+----
+
 === Checking installation
 ----
 $ docker -v <1>
@@ -123,7 +128,7 @@ $ docker stop $hash <9>
 <8> shows all images for `$image_name` (all versions)
 <9> stops running container `$hash`
 
-TIP: [ctrl] + [p] + [q] exits (detaches from) a container without killing it.
+TIP: [ctrl] + [p] + [q] exits (detaches from) a container without killing it. Use `docker attach $hash` to reattach.
 
 == Registries and repositories
 A Registry (_hub.docker.com_) contains many Repositories (_fedora_, _ubuntu_, _redis_, etc).
@@ -213,10 +218,36 @@ $ docker exec -it $hash /bin/bash <4>
 NOTE: Logging out of this container will not stop it!
 
 == Volumes
+
+.What are volumes for
+- To store mutable container data externally
+- To share data between host and containers
+- To share data between containers
+
 .Run a container, mapping a host directory into the container
 ----
 $ docker run -v $from_host_dir:$to_guest_dir $image_name
 ----
+
+.Run a container that creates and mounts a volume
+----
+$ docker run -it -v /tmp ubuntu /bin/bash
+----
+
+.Create a volume and mount it later on
+----
+$ docker volume create --name vol
+$ docker run -it -v vol:/data ubuntu /bin/bash
+----
+
+.Create and share a volume
+----
+$ docker create -v /tmp --name datacontainer ubuntu <1>
+$ docker run -it --volumes-from datacontainer ubuntu /bin/bash <2>
+----
+<1> Creates a volume based on `ubuntu`, named `datacontainer` to be mounted on `/tmp` to containers that will want to use it.
+<2> Runs a container that mounts the previously created volume. Now even after destroying the container, data stored on the volume will remain. Volume can only be mounted on the directory declared during volume creation time, that is `/tmp`.
+
 
 == Dockerfile
 
@@ -227,8 +258,8 @@ A Dockerfile contains simple instructions to create a docker image.
 * Instructions to build an image
 * All other subdirectories will be included in the build
 ----
-$ docker build
-$ docker build -t mytag:version .
+$ docker build <1>
+$ docker build -t mytag:version . <2>
 ----
 <1> builds an image with instructions from the Dockerfile
 <2> tag and build from local directory
@@ -277,3 +308,7 @@ Login with SSH (password: admin)
 ----
 ssh root@localhost -p 1522
 ----
+
+== Resources
+* https://www.digitalocean.com/community/tutorials/how-to-work-with-docker-data-volumes-on-ubuntu-14-04[How To Work with Docker Data Volumes on Ubuntu]
+* http://container-solutions.com/understanding-volumes-docker/[Understanding Volumes in Docker]
