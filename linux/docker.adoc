@@ -248,6 +248,27 @@ $ docker run -it --volumes-from datacontainer ubuntu /bin/bash <2>
 <1> Creates a volume based on `ubuntu`, named `datacontainer` to be mounted on `/tmp` to containers that will want to use it.
 <2> Runs a container that mounts the previously created volume. Now even after destroying the container, data stored on the volume will remain. Volume can only be mounted on the directory declared during volume creation time, that is `/tmp`.
 
+== Login
+Access to registries require login.
+----
+$ docker login docker_registry:port
+----
+Login in creates or updates a file in `$HOME/.docker/config.json`, that looks like:
+----
+{
+    "auths": {
+        "192.168.56.1:18000": {
+            "auth": "YWRtaW46YWRtaW4xMjM="
+        }
+    }
+}
+----
+TIP: The authentication token is base64 encoded and can be decoded like so, `$ echo "token" | base64 -d`
+
+To logout:
+----
+$ docker logout docker_registry:port
+----
 
 == Dockerfile
 
