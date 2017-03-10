@@ -64,9 +64,6 @@ WHERE
 
 .XMLTable function syntax
 ----
-----
-----
-
 XMLTable(
     '<XQuery>'  PASSING <xml column>
     COLUMNS
