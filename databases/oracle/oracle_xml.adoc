@@ -1,0 +1,78 @@
+== Oracle XML types
+
+Oracle supports a custom type that stores XML and allows for querying within it using an SQL-like syntax.
+
+.Create table
+[source,sql]
+----
+CREATE TABLE EMPLOYEES
+(
+   id     NUMBER,
+   data   XMLTYPE
+);
+----
+
+.Insert data
+[source,sql]
+----
+INSERT INTO EMPLOYEES
+     VALUES (1, xmltype ('<Employees>
+    <Employee emplid="1111" type="admin">
+        <firstname>John</firstname>
+        <lastname>Watson</lastname>
+        <age>30</age>
+        <email>johnwatson@sh.com</email>
+    </Employee>
+    <Employee emplid="2222" type="admin">
+        <firstname>Sherlock</firstname>
+        <lastname>Homes</lastname>
+        <age>32</age>
+        <email>sherlock@sh.com</email>
+    </Employee>
+    <Employee emplid="3333" type="user">
+        <firstname>Jim</firstname>
+        <lastname>Moriarty</lastname>
+        <age>52</age>
+        <email>jim@sh.com</email>
+    </Employee>
+    <Employee emplid="4444" type="user">
+        <firstname>Mycroft</firstname>
+        <lastname>Holmes</lastname>
+        <age>41</age>
+        <email>mycroft@sh.com</email>
+    </Employee>
+</Employees>'));
+----
+
+.Sample Query
+[source,sql]
+----
+-- Printa firstname and lastname of all employees 
+SELECT 
+    t.id, x.* 
+FROM
+    employees t,
+    XMLTABLE (
+        '/Employees/Employee' PASSING t.data
+        COLUMNS 
+            firstname VARCHAR2(30) PATH 'firstname', 
+            lastname VARCHAR2(30) PATH 'lastname'
+    ) x
+WHERE
+    t.id = 1;
+----
+
+.XMLTable function syntax
+----
+----
+----
+
+XMLTable(
+    '<XQuery>'  PASSING <xml column>
+    COLUMNS
+        <new column name> <column type> PATH <XQuery path>
+)
+----
+
+=== Resources
+* http://viralpatel.net/blogs/oracle-xmltable-tutorial/
