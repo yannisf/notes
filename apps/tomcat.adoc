@@ -59,6 +59,6 @@ In `server.xml` add or enable:
 NOTE: There are various SSL connectors, but here just a working configuration is presented. For a more in depth presentation of the options please go to http://tomcat.apache.org/tomcat-8.5-doc/ssl-howto.html. The `Connector` options are thouroughly documented in https://tomcat.apache.org/tomcat-8.5-doc/config/http.html.
 
 ==== Validate
-Validate that the cofiguration was successful by starting tomcat and pointing your browset to https://localhost:8443. Most likely you will see a warning that the connection is not secured. This is due to the nature of the certificate (self-signed). Just add an expeption and continue. To troubleshoot you might want to review https://tomcat.apache.org/tomcat-8.5-doc/ssl-howto.html#Troubleshooting.
+Validate that the cofiguration was successful by starting tomcat and pointing your browser to https://localhost:8443. Most likely you will see a warning that the connection is not secured. This is due to the nature of the certificate (self-signed). Just add an expeption and continue. To troubleshoot you might want to review https://tomcat.apache.org/tomcat-8.5-doc/ssl-howto.html#Troubleshooting.
 
 
