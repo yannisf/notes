@@ -1,0 +1,64 @@
+== Apache Tomcat
+
+=== SSL
+Configuring Tomcat for SSL, concerns:
+
+- Obtaining a certificate
+- Enabling an SSL connector
+
+==== Certificate
+To configure SSL a private key and a signed certificate from a trusted certificate authority is required. Since most of times this is not required for a development environment a self signed certificate will do. The certificate and key may be generated with the `openssl` toolset or with the java `keytool` that is provided with the JDK. Since working with keytool is much simpler, this option will be used in this guide.
+
+----
+$ keytool \
+    -genkeypair \ <1>
+    -keystore conf/localhost-rsa.jks \ <2>
+    -alias tomcat \ <3>
+    -keyalg rsa \ <4>
+    -keysize 4096 \ <5>
+    -storepass secret1 \ <6>
+    -keypass secret2 \ <7>
+    -ext SAN=dns:localhost \ <8>
+    -validity 1000 \ <9>
+    -v <10>
+----
+<1> The keytool command, generate a keypair in this case
+<2> The location of the keystore. If not exists, it will be created.
+<3> The alias of the key to be created.
+<4> The key algorithm.
+<5> The key keysize.
+<6> The keystore password. If not provided here a prompt will be displayed.
+<7> The key password. If not provided here a prompt will be displayed. By default it will be same to the keystore password.
+<8> SAN extensions (optional).
+<9> The validity of the certificate and key in days. For development select a big number.
+<10> Be verbose.
+
+A form will need to be filled in with the entity information. Typically just accepting the defaults by pressingg <enter> is fine. Ideally, the first question _What is your first and last name?_ should be answered with the FQDN of the server (could be just _localhost_).
+
+==== SSL connector
+In `server.xml` add or enable:
+
+[source,xml]
+<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+      maxThreads="150" SSLEnabled="true">
+    <SSLHostConfig>
+        <Certificate
+                certificateKeystoreFile="conf/localhost-rsa.jks" <1>
+                certificateKeyAlias="tomcat" <2>
+                certificateKeystorePassword="secret1" <3>
+                certificateKeyPassword="secret2" <4>
+                type="RSA" />
+    </SSLHostConfig>
+</Connector>
+
+<1> The java keystore file where the certificate and the key are stored.
+<2> The alias of the key. The first alias is read, so if the keystore has just one key this option is optional.
+<3> The password of the keystore.
+<4> The password of the key. If this is not provided, it is assumed that it is the same with the keystore password.
+
+NOTE: There are various SSL connectors, but here just a working configuration is presented. For a more in depth presentation of the options please go to http://tomcat.apache.org/tomcat-8.5-doc/ssl-howto.html. The `Connector` options are thouroughly documented in https://tomcat.apache.org/tomcat-8.5-doc/config/http.html.
+
+==== Validate
+Validate that the cofiguration was successful by starting tomcat and pointing your browset to https://localhost:8443. Most likely you will see a warning that the connection is not secured. This is due to the nature of the certificate (self-signed). Just add an expeption and continue. To troubleshoot you might want to review https://tomcat.apache.org/tomcat-8.5-doc/ssl-howto.html#Troubleshooting.
+
+
