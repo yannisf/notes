@@ -71,5 +71,7 @@ XMLTable(
 )
 ----
 
+NOTE: Namespaces:   XMLTABLE (XMLNAMESPACES ('http://myns' AS "ns"), '/' PASSING mycol..
+
 === Resources
 * http://viralpatel.net/blogs/oracle-xmltable-tutorial/
