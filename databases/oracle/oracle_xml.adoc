@@ -47,15 +47,15 @@ INSERT INTO EMPLOYEES
 .Sample Query
 [source,sql]
 ----
--- Printa firstname and lastname of all employees 
-SELECT 
-    t.id, x.* 
+-- Printa firstname and lastname of all employees
+SELECT
+    t.id, x.*
 FROM
     employees t,
     XMLTABLE (
         '/Employees/Employee' PASSING t.data
-        COLUMNS 
-            firstname VARCHAR2(30) PATH 'firstname', 
+        COLUMNS
+            firstname VARCHAR2(30) PATH 'firstname',
             lastname VARCHAR2(30) PATH 'lastname'
     ) x
 WHERE
@@ -65,13 +65,21 @@ WHERE
 .XMLTable function syntax
 ----
 XMLTable(
-    '<XQuery>'  PASSING <xml column>
+    '<XQuery>' PASSING <xml column>
     COLUMNS
         <new column name> <column type> PATH <XQuery path>
 )
 ----
 
-NOTE: Namespaces:   XMLTABLE (XMLNAMESPACES ('http://myns' AS "ns"), '/' PASSING mycol..
+[TIP]
+====
+In case the XML is namespaced, the syntax displayed before must be changed accordingly:
+----
+XMLTable(
+    XMLNAMESPACES ('http://myns' AS "ns"),
+    '/' PASSING <xml column> ...)
+----
+====
 
 === Resources
 * http://viralpatel.net/blogs/oracle-xmltable-tutorial/
