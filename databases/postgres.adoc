@@ -1,9 +1,37 @@
 == postgres
 
 === Run a docker container
-https://hub.docker.com/_/postgres/
+
 ----
 docker run --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres
+----
+
+
+=== Setup
+
+.Install
+----
+$ sudo apt-get install postgresql
+----
+
+.Setup
+
+.Edit postgresql.conf (/etc/postgresql/9.5/main/postgresql.conf) to set the listen address
+----
+listen_addresses = '*'
+----
+
+.Edit pg_hba.conf (/etc/postgresql/9.5/main/pg_hba.conf) to allow remote access
+----
+host    all             all             192.168.1.0/24           trust
+----
+TIP: Depending on your installation environment you might need to add another network range.
+
+. Restart
+. Set password for postgres user
+----
+$ sudo -u postgres psql postgres
+postgres=# \password postgres
 ----
 
 === Create user and database using SQL
@@ -62,7 +90,7 @@ pg_restore -h <host> -U <user_to_connect_as> <database_to_restore_to> -C -W <dum
 ----
 pg_restore -h localhost -U registry -d registry_qa -C -W registry.tar
 ----
- 
+
 .To restore a database into an existing one
 ----
 pg_restore -h localhost -d registry_test -U postgres registry-20161113.tar
