@@ -115,6 +115,9 @@ postgres=# \list
 ----
 TIP: Shortcut: `\l`
 
-.Drop database
-After connecting as `postgres` (database super user):
+.Other psql operations
 ----
+postgres=# \dt (list all tables in the current database)
+postgres=# \connect database_name (connects to database_name)
+----
+
