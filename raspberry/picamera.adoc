@@ -2,7 +2,19 @@
 The *PI Camera* is a small hardware module that can be hooked on a Raspberry PI
 
 === Streaming video
-Using the PI Camera, video can be streamed from the camera to another system through the network.
+Using the PI Camera, video can be streamed from the camera _(Raspberry PI)_ to another system _(a linux host)_ through the network.
+
+.On the linux host
+First a listening socket must be established on the linux host. The Linux host must have installed *mplayer* and *netcat* in order to receive and decode the video.
+
+----
+$ nc -l 9898 | mplayer -fps 24 -demuxer h264es -
+----
+
+* *-l 9898*: listen on port 9898
+* *-fps 24*: frames per second
+* *-demuxer h264es* : demux using h264es
+* *-* : input should be standard input
 
 .On the Raspberry PI
 ----
@@ -17,18 +29,7 @@ $ raspivid -t 0 -w 1280 -h 720 -rot 180 -fps 24 -o - | nc 192.168.1.3 9898
 
 The standard output of Raspberry PI pipes its output to netcat, which in this case establishes a connection to _192.168.1.1.3_ on port 9898
 
-.On the linux host
-The Linux host must have installed *mplayer* and *netcat* in order to receive and decode the video.
-----
-$ nc -l 9898 | mplayer -fps 24 -demuxer h264es -
-----
-
-* *-l 9898*: listen on port 9898
-* *-fps 24*: frames per second
-* *-demuxer h264es* : demux using h264es
-* *-* : input should be standard input
-
-CAUTION: The stream is encrypted, and possibly anyone in between the Raspbery and the linux host can intercept it (man in the middle).
+CAUTION: The stream is **unencrypted**, and possibly anyone in between the Raspbery and the linux host can intercept it (man in the middle).
 
 === Using encryption
 Using *ssh* facilities, one can encrypt the stream, and as a bonus, control the whole procedure from the linux host without having to log into the Raspberry PI interactively. Additionally, if _ssh key authentication_ is configured, then this is by far the most comfortable way to stream.

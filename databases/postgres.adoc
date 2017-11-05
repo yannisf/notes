@@ -83,7 +83,7 @@ pg_dump -U registry -W -F t registry > registry.tar
 === Restore
 
 ----
-pg_restore -h <host> -U <user_to_connect_as> <database_to_restore_to> -C -W <dump.tar>
+pg_restore -h <host> -U <user_to_connect_as> -d <database_to_restore_to> -C -W <dump.tar>
 ----
 
 .Example
@@ -106,4 +106,15 @@ select version();
 .Connect to postgres
 ----
 psql --host=localhost --port=5432 --username=postgres
+----
+
+.Show all databases
+After connecting as `postgres` (database super user):
+----
+postgres=# \list
+----
+TIP: Shortcut: `\l`
+
+.Drop database
+After connecting as `postgres` (database super user):
 ----
