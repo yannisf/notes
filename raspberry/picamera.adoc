@@ -45,6 +45,13 @@ If using as command, *raspivid* with the same parameters used in the previous ex
 [TIP]
 ====
 To store the stream as a file too, use *tee*:
-[code, bash]
+
+----
 $ ssh user@raspberry "raspivid -t 0 -w 1280 -h 720 -rot 180 -fps 24 -o -" | tee stream.h264 | mplayer -fps 24 -demuxer h264es -
+----
+
+And to playback:
+----
+$ mplayer -fps 24 -demuxer h264es stream.h264
+----
 ====
