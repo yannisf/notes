@@ -1,0 +1,23 @@
+= Wireless dongle
+The following steps were necessary to enable a wireless USB dongle with a RaspberryPI.
+
+== Edit `/etc/network/interfaces`
+----
+allow-hotplug wlan0
+iface wlan0 inet manual
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+----
+
+==  Edit `wpa_supplicant.conf`
+----
+network={
+    ssid="the_ssid"
+    psk="the_password"
+}
+----
+
+== Enable the wpa_supplicant service
+----
+# systemctl enable wpa_supplicant.service
+# systemctl start wpa_supplicant.service
+----
