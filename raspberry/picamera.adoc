@@ -1,12 +1,15 @@
-== PI Camera
-The *PI Camera* is a small hardware module that can be hooked on a Raspberry PI
+= PI Camera
 
-=== Streaming video
-Using the PI Camera, video can be streamed from the camera _(Raspberry PI)_ to another system _(a linux host)_ through the network.
+The **PI Camera** is a small hardware module that can be hooked on a Raspberry PI.
+
+== Streaming video
+Using the PI Camera, video can be streamed from the camera _(Raspberry PI)_ to another system _(a linux or windows host)_ through the network.
+
+=== Linux
 
 .On the linux host
 First a listening socket must be established on the linux host. The Linux host must have installed *mplayer* and *netcat* in order to receive and decode the video.
-
+[code,bash]
 ----
 $ nc -l 9898 | mplayer -fps 24 -demuxer h264es -
 ----
@@ -17,6 +20,7 @@ $ nc -l 9898 | mplayer -fps 24 -demuxer h264es -
 * *-* : input should be standard input
 
 .On the Raspberry PI
+[code,bash]
 ----
 $ raspivid -t 0 -w 1280 -h 720 -rot 180 -fps 24 -o - | nc 192.168.1.3 9898
 ----
@@ -31,9 +35,10 @@ The standard output of Raspberry PI pipes its output to netcat, which in this ca
 
 CAUTION: The stream is **unencrypted**, and possibly anyone in between the Raspbery and the linux host can intercept it (man in the middle).
 
-=== Using encryption
+==== Using encryption
 Using *ssh* facilities, one can encrypt the stream, and as a bonus, control the whole procedure from the linux host without having to log into the Raspberry PI interactively. Additionally, if _ssh key authentication_ is configured, then this is by far the most comfortable way to stream.
 
+[code,bash]
 ----
 $ ssh user@raspberry "raspivid -t 0 -w 1280 -h 720 -rot 180 -fps 24 -o -" | mplayer -fps 24 -demuxer h264es -
 ----
@@ -48,3 +53,21 @@ To store the stream as a file too, use *tee*:
 [code, bash]
 $ ssh user@raspberry "raspivid -t 0 -w 1280 -h 720 -rot 180 -fps 24 -o -" | tee stream.h264 | mplayer -fps 24 -demuxer h264es -
 ====
+
+=== Windows
+.On the Raspberry PI
+Make sure VLC is installed on the RaspberryPI. The console version of VLC is sufficient and can be installed like so:
+
+[code,bash]
+----
+$ sudo apt install vlc-nox
+----
+
+Next open the stream:
+[code,bash]
+----
+$ raspivid -t 0 -w 1280 -h 720 -rot 180 -fps 24 -o - | cvlc stream:///dev/stdin --sout '#rtp{sdp=rtsp://:8554/}' :demux=h264
+----
+
+.On the Windows host
+Open VLC and then _Media > Open Network Stream..._ and enter `rtsp://{raspberrypihost}:8554/`
