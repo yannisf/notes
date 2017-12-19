@@ -1,0 +1,32 @@
+= systemd
+
+- /lib/systemd/systemd
+
+Systemd tasks are organized as units. The most common units are services (.service), mount points (.mount), devices (.device), sockets (.socket), or timers (.timer). For instance, starting the secure shell daemon is done by the unit ssh.service. 
+
+Unit files are located in the `/lib/systemd/system` directory. If an identically named local unit file exists in the directory `/etc/systemd/system`, it will take precedence and systemd will ignore the file in the `/lib/systemd/system` directory. System administrators should put customized unit files in `/etc/systemd/system`.
+
+Targets are groups of units.  Targets can build on top of another or depend on other targets.
+
+== systemctl
+
+- `systemctl`: lists all the unit files known to systemd (except those that have been disabled), as well as their status.
+- `systemctl status`:  gives a better view of the services, as well as the related processes.
+- `systemctl status ntp.service`: returns even more details, as well as the last few log lines related to the service.
+- `systemctl list-unit-files`: lists installed unit files
+- `systemctl {start|stop|reload|restart} servicename.service`: Start, stop, reload or restart a service.
+- `systemctl {enable|disable|is-enabled} servicename.service`: Enables, disables or checks if a service is enabled
+
+== journalctl
+
+- `journalctl`: prints all log messages that occurred since system boot
+- `journalctl -u ssh.service`: prints log messages for ssh.servide
+
+== Unit files
+_unit files_  syntax is derived from the widely-used _ini_ files, with `key = value` pairs grouped between `[section]` headers. Unit files are stored under `/lib/systemd/system/` and `/etc/systemd/system/`. They come in several flavours, but the most significant are `services` and `targets` here. 
+
+== Links
+
+- https://www.debian.org/doc/manuals/debian-handbook/unix-services.en.html#sect.systemd[The Debian Administrator's Handbook]
+- https://wiki.debian.org/systemd [The Debian Wiki]
+
