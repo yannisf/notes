@@ -33,18 +33,6 @@ $ docker run hello-world <4>
 <3> information on the docker installation, images, etc
 <4> runs a sample container
 
-=== Updating
-----
-$ wget -qO- https://get.docker.com/gpg | apt-key add - <1>
-$ echo deb http://get.docker.com/ubuntu docker main > /etc/apt/sources.list.d/docker.list <2>
-$ apt-get update <3>
-$ apt-get install lxc-docker <4>
-----
-<1> install the key
-<2> add the repo
-<3> update packages
-<4> install docker package
-
 === Running containers
 
 .Run a container based on ubuntu interactively
@@ -75,8 +63,8 @@ $ docker run ubuntu /bin/bash -c "echo 'cool content' > /tmp/cool-file"
 
 .Example: execute a command in a running container
 ----
-$ docker exec -it $image_name /bin/bash <1>
-$ docker exec -d $image_name touch /tmp/log <1>
+$ docker exec -it $container_name /bin/bash <1>
+$ docker exec -d $container_name touch /tmp/log <1>
 ----
 <1> Executes interactively a shell in a running container with name `$image_name`
 <2> Creates a file, detached, in a running container
@@ -147,6 +135,45 @@ $ docker images
 ----
 <1> All locally stored images
 
+== About repositories
+The default docker repository is dockerhub. Nevertheless, one might want to use
+other repositories, and typically not HTTPS ones e.g. in the case when a valid
+certificate is not available and you want to proxy DockerHub through Nexus.
+
+Provided that one has already configured Nexus accordingly, add the following on
+the client machines:
+
+/etc/docker/daemon.json
+[source,json]
+----
+{
+    "insecure-registries": [
+        "my-nexus:8082",
+        "my-nexus:8083"
+    ],
+    "disable-legacy-registry": true
+}
+----
+
+.Restart docker
+----
+$ sudo systemctl restart docker
+----
+
+.Authenticate (once)
+----
+$ docker login -u admin -p admin123 my-nexus:8082
+$ docker login -u admin -p admin123 my-nexus:8083
+----
+
+.Run a container
+---
+$ docker run -it my-nexus:8082/ubuntu /bin/bash
+
+.Resources
+http://codeheaven.io/using-nexus-3-as-your-repository-part-3-docker-images/
+
+
 == Exporting a docker container
 
 The procedure in high level steps is:
@@ -186,7 +213,8 @@ $ docker run ubuntu:version <3>
 * `-t`: assign a tty
 * `-d`: detached
 * `--cpu-shares`: how much CPU (1024 being 100%)
-* `memory`: how much memory to use
+* `--memory`: how much memory to use
+* `--restart (no|on-failure|unless-stopped|always)`: restart container on daemon restart according to policy
 
 .Useful commands on running containers
 ----
