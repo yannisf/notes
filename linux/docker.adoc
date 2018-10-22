@@ -334,10 +334,12 @@ CMD ["echo", "Hello", "World"]
 $ docker tag $hash repo/$image_name:version <1>
 $ docker push repo/$image_name:version <2>
 $ docker rmi $image_name <3>
+$ docker system prune --volumes <4>
 ----
 <1> tags `$hash`
 <2> pushes `$image_name` to repository
 <3> removes `$image_name`
+<4> remove all stopped containers, all dangling images all unused networks and volumes
 
 == Running Oracle 11g XE in a container
 ----
