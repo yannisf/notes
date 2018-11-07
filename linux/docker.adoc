@@ -212,6 +212,7 @@ $ docker run ubuntu:version <3>
 * `-i`: interactive
 * `-t`: assign a tty
 * `-d`: detached
+* `--rm`: remove container when it exits
 * `--cpu-shares`: how much CPU (1024 being 100%)
 * `--memory`: how much memory to use
 * `--restart (no|on-failure|unless-stopped|always)`: restart container on daemon restart according to policy

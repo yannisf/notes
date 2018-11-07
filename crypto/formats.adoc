@@ -1,32 +1,37 @@
-== Cryptography file formats
+= Cryptography file formats
 
-.Personal Information Exchange (PKCS #12): *.pfx, .p12, .pkcs12*
+== Standards and Formats
+
+PKCS stands for "Public Key Cryptography Standards" and is a set of standards by RSA.
+
+=== Personal Information Exchange (PKCS #12): *.pfx, .p12, .pkcs12*
 The Personal Information Exchange format (PFX, also called PKCS #12) supports secure storage of certificates, private keys, and all certificates in a certification path. The PKCS #12 format is the only file format that can be used to export a certificate and its private key.
 
-.Cryptographic Message Syntax Standard (PKCS #7): *.p7b, .p7r, .spc*
+=== Cryptographic Message Syntax Standard (PKCS #7): *.p7b, .p7r, .spc*
 The PKCS #7 format supports storage of certificates and all certificates in the certification path. It does not support storage of private keys and is generally used by the CA to provide certificate chain to clients. It can be stored in Base64 ASCII format in which case it contains `-----BEGIN PKCS7-----` and `-----END PKCS7-----`.
 
-.DER-encoded binary X.509: *.der, .cer, .crt, .cert*
+=== DER-encoded binary X.509: *.der, .cer, .crt, .cert*
 The _Distinguished Encoding Rules_ (DER) format supports storage of a single certificate. This format does not support storage of the private key or certification path. It is a binary format.
 
-.Base64-encoded X.509: *.pem, .cer, .crt, .cert*
+=== Base64-encoded X.509: *.pem, .cer, .crt, .cert*
 The Base64 format supports storage of a single certificate. This format does not support storage of the private key or certification path. The encoded string is enclosed between `—–BEGIN CERTIFICATE—–` and `—–END CERTIFICATE—–`.
 
 NOTE: A .pem file format can support multiple digital certificates, including a certificate chain.
 
-.Key files: *.key*
+=== Key files: *.key*
 This extension is used both for public and private PKCS#8 keys. The keys may be encoded as binary DER or as ASCII PEM.
 
-.Certificate Signing Request: *.csr*
+=== Certificate Signing Request: *.csr*
 This file type is issued by applications to submit requests to the Certification Authority (CA). The request can be base64 encoded and is enclosed between `—–BEGIN NEW CERTIFICATE REQUEST—–` and `—–END NEW CERTIFICATE REQUEST—–`.
 
-.Certificate Revocation List: *.crl*
+=== Certificate Revocation List: *.crl*
 The Certificate Revocation List or CRL is a file type that identifies whether a certificate has been revocated or not.
 
-==== Wrapping up
+=== Wrapping up
 There are 2 main encoding formats: binary (DER) and ASCII base64 (PEM). Then cryptographic artifacts might be encoding using either of the formats provided they are  compatible with.
 
-=== Resources
+== Resources
+- https://en.wikipedia.org/wiki/PKCS
 - https://en.wikipedia.org/wiki/X.509
 - https://technet.microsoft.com/en-us/library/cc770735(v=ws.11).aspx
 - https://blogs.msdn.microsoft.com/kaushal/2010/11/04/various-ssltls-certificate-file-typesextensions/

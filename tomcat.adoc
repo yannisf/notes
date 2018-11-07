@@ -1,0 +1,28 @@
+= Tomcat
+
+== Docker
+
+----
+$ docker run <1>
+    --name tomcat \ <2>
+    --restart unless-stopped \ <3>
+    -p 8181:8080 \ <4>
+    --net=my_bridge \ <5>
+    -d \ <6>
+    -v /vagrant/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml \ <7>
+    -v /vagrant/context.xml:/usr/local/tomcat/webapps/manager/META-INF/context.xml \ <8>
+    tomcat:9 <9>
+----
+
+<1> Run a container
+<2> Assign a name to the container
+<3> On docker daemon restart, restart the container as well, unless it was stopped
+<4> Map host port 8181 of the host onto port 8080 of the container
+<5> Attach the container on `my_bridge1` network
+<6> Run container on the background (detach)
+<7> map local file to container file (tomcat-users.xml)
+<8> map local file to container file (context.xml of manager app)
+<9> the image to create the container from
+
+Steps `4`, `5` from above are necessary if access to the manager app is required. In `tomcat-users.xml` a user is added with `manager-gui` role, and in `context.xml` a valve is commented out so that access to the manager app is allowed even if not from the loopback interface.
+
