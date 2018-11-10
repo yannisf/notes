@@ -80,5 +80,21 @@ IMPORTANT NOTES:
 ## Create a PKCS#12 file of key and certificate
 
 ```bash
-$ openssl pkcs12 -export -in fullchain1.pem -inkey privkey1.pem -out pkcs.p12 -name mydomain
+$ openssl pkcs12 \
+    -export \
+    -in fullchain1.pem \
+    -inkey privkey1.pem \
+    -out server.p12 \
+    -name mydomain
 ```
+## Create a JKS out of PKCS#12
+
+```
+$ keytool -importkeystore \
+  -deststorepass [changeit] \
+  -destkeypass [changeit] \
+  -destkeystore server.jks \
+  -srckeystore server.p12 \
+  -srcstoretype PKCS12 \
+  -srcstorepass some-password \
+  -alias [some-alias]
