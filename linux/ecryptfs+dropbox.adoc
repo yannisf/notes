@@ -1,0 +1,31 @@
+== eCryptfs and Dropbox
+
+When the user directory is encrypted with _eCryptfs_, Dropbox will not start. This is due to the fact that Dropbox only knows how to sync *ext4* filesystems. To trick Dropbox we have to mount the Dropbox folder on a ext4 filesystem.
+
+.Stop Dropbox
+    killall dropbox
+
+.Backup old Dropbox
+    mv ~/Dropbox ~/Dropbox.old
+
+.Initialize the file
+    dd if=/dev/zero of=~/.dropbox/storage bs=1M count=9999
+
+.Create the filesystem
+    mkfs.ext4 ~/.dropbox/storage
+
+.Prevent writes when not mounted
+    sudo chattr +i ~/Dropbox
+
+.Mount the filesystem
+    sudo mount -t ext4 -o loop ~/.dropbox/storage ~/Dropbox
+
+.Fix permissions
+    sudo chown -R username:groupname ~/Dropbox
+
+.Restore content
+    cp -a ~/Dropbox.old/* ~/Dropbox
+
+.Start Dropbox
+    dropbox start
+
