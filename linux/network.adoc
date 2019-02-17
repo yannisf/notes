@@ -4,3 +4,25 @@
 ----
 netstat -lnt4
 ----
+
+
+=== DNS related
+
+.Information on DNS transactions
+
+  sudo systemd-resolve --statistics
+
+.Flush DNS cache
+
+  sudo systemd-resolve --flush-caches
+
+
+=== Hostname
+
+.Information on the hostname
+
+  hostnamectl
+
+.Set the hostname
+
+  hostnamectl set-hostname newhostname
