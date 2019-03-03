@@ -246,6 +246,16 @@ $ docker exec -it $hash /bin/bash <4>
 
 NOTE: Logging out of this container will not stop it!
 
+== Networking
+
+It is possible to set up docker container networks.
+
+.Host networking
+
+Start containers with the `--network="host"` option. In that case, `-p` and `-P`
+options do not take effect, but the container will be able to access all
+localhost endpoints, even ones that are started as docker containers.
+
 == Volumes
 
 .What are volumes for
