@@ -340,6 +340,8 @@ CMD ["echo", "Hello", "World"]
 * `EXPOSE`: Exposes a network port
 * `ENTRYPOINT`: The command to run, cannot be overridden and anything appended from the command line is passed as argument
 
+TIP: `ENTRYPOINT` specifies a command that will always be executed when the container starts. `CMD` specifies the default arguments that will be fed to the `ENTRYPOINT` which can be overwritten from command line when docker container runs.
+
 == Futher commands
 ----
 $ docker tag $hash repo/$image_name:version <1>
@@ -370,6 +372,12 @@ Login with SSH (password: admin)
 ----
 ssh root@localhost -p 1522
 ----
+
+== Recipies
+
+=== Bulk remove containers
+
+$ docker rm $(docker ps -a -q -f "ancestor=openjdk:8-alpine")
 
 == Resources
 * https://www.digitalocean.com/community/tutorials/how-to-work-with-docker-data-volumes-on-ubuntu-14-04[How To Work with Docker Data Volumes on Ubuntu]

@@ -48,26 +48,34 @@ $ sudo certbot certonly --webroot -w tmp -d mydomain.com
 ```
 
 **tmp**: this is the root folder of the web server started previously
-**mydomain.com**: this is the domain name you own, and want to create a certificate for
+**mydomain.com**: this is the domain name you own, and want to create a certificate for.
 
-After answering a couple of questions the certificate is ready. The following notes are printed and contain important information
+After answering a couple of questions the certificate is ready. The following notes are printed and contain important information:
 
 ```txt
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Plugins selected: Authenticator webroot, Installer None
+Cert is due for renewal, auto-renewing...
+Renewing an existing certificate
+Performing the following challenges:
+http-01 challenge for frlab.eu
+Using the webroot path /var/www/html for all unmatched domains.
+Waiting for verification...
+Cleaning up challenges
+
 IMPORTANT NOTES:
  - Congratulations! Your certificate and chain have been saved at:
    /etc/letsencrypt/live/frlab.eu/fullchain.pem
    Your key file has been saved at:
    /etc/letsencrypt/live/frlab.eu/privkey.pem
-   Your cert will expire on 2019-02-06. To obtain a new or tweaked
+   Your cert will expire on 2019-07-28. To obtain a new or tweaked
    version of this certificate in the future, simply run certbot
    again. To non-interactively renew *all* of your certificates, run
    "certbot renew"
- - Your account credentials have been saved in your Certbot
-   configuration directory at /etc/letsencrypt. You should make a
-   secure backup of this folder now. This configuration directory will
-   also contain certificates and private keys obtained by Certbot so
-   making regular backups of this folder is ideal.
  - If you like Certbot, please consider supporting our work by:
+
+   Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+   Donating to EFF:                    https://eff.org/donate-le
 ```
 
 ## Files generated

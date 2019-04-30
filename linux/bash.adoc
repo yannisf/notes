@@ -53,3 +53,14 @@ alias sshls='function _sshls() { ssh $1 "ls -al";};_sshls'
 ----
 and with `sshls hostname` the output of `ls -al` on the remote host is displayed.
 
+== Exercises
+
+- Print 1000 random numbers in the range 1..1000, sort them, eliminate duplicates
+and take the first 100
+
+[code,bash]
+----
+(for i in {1..1000}; do shuf -i 1-1000 -n1; done;) | sort -nu | head -n100
+----
+
+
