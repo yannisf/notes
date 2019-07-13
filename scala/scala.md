@@ -61,6 +61,11 @@ $ sbt new sbt/scala-seed.g8
 
 Prepending  command with ~ watches the files.
 
+Scopes: Project / Configuration / Task / Key
+Configuration := Compile | Test | Runtime
+Task := compile | package | run | ...
+Key := sourceDirectories | scalaOptions ...
+
 ## scala
 
 ### Noteworthy
