@@ -67,7 +67,7 @@ This switch takes a pattern as argument, where the user may provide files that d
 
 The ** within the pattern ensures that whatever the project directory is, and the directories nested within it, directories named `node_modules` will not be backed up.
 
-TIP: Several exclusions may be provided by repeating the --exclude switch with othert patterns.
+TIP: Several exclusions may be provided by repeating the --exclude switch with other patterns.
 
 ===== source directories
 The directories that are to be backed up are enumerated here. Since a relative notation is used the script must be run from the home directory in order to find the directories.
@@ -103,3 +103,7 @@ And schedule the back to execute daily at say 21:00.
 . Generate the keys in the local system. Do not use a passphrase.
 . Install the public key in the NAS user you want to backup to by adding it to `~/.ssh/authorized_keys`.
 . Create a `~/.ssh/config` to your local system to facilitate configuration, such as where is the remote system and which user to use to connect.
+
+Back up top level installed software names
+
+        apt list --installed | cut -f1 -d"/" | cut -f1 -d"-" | grep -ve lib | uniq > packages.backup

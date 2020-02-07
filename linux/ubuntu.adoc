@@ -1,0 +1,6 @@
+= Ubuntu tips
+
+.Ugly fonts in java applications
+Add this line in `/etc/environment`
+
+>  _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true'

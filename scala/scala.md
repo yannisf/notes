@@ -89,3 +89,15 @@ Key := sourceDirectories | scalaOptions ...
 - **Structural types** use reflection. Use with care and only when needed.
 - In case classes **copy** helps to create a clone with immutable values overriden
 - : - type ascription, a hint that helps compiler to understand, what type does that expression have
+
+
+# `map`/`flatMap` for `Option`s and `Future`s
+
+`map` and `flatMap` operate on the enclosed value (they unwrap the `Option`/`Future`), but
+
+- `map`: wraps it again after returning (without intervention)
+- `flatMap`: does not wrap it, but expects the code to return a wrapped value
+
+**NOTE**: Use should use `flatMap` to avoid creating an `Option[Option]` or `Future[Future]`
+**NOTE**: When operating on a collection of `Option`s, `flatMap` will only map defined `Option`s
+**NOTE**: `flatMap` is equivalent with `map` and `flatten`

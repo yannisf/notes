@@ -1,0 +1,76 @@
+= kubernetes
+
+An orchestrator for microservices apps that run on containers
+
+- Developed initially by Google
+- Written in Go
+- https://github.com/kubernetes/kubernetes
+
+== Concepts
+
+- masters
+- nodes
+- pods
+- services
+- deployments
+
+== Master
+
+- apiserver
+- cluster store
+- controller
+- scheduler
+
+Clients communicate with master through `kubectl` in `json`.
+
+== Nodes (minions)
+
+=== Kubelet (agent)
+
+Registers the node with the cluster and then atches _apiserver_, instantiates _pods_, reports back to _master_. Exposes endpoints on port `10255`. Typical endpoints are:
+
+- `/spec`
+- `/healthz`
+- `/pods`
+
+=== Container engine
+
+Inside the pods exist containers, thus a  container engine is required to handle
+task such as pull images, start/stop containers. The most common engine is *Docker*.
+
+=== kube-proxy
+
+This component handles the networking of the node. Each pod gets a unique IP. All
+containers within a pod share the same IP. Also performs lightweight load balancing
+through services. A service hides multiple pods behind a single network address.
+
+Kubernetes is given a declarative manifest file describing the cluster desired
+state. Then it is up to kubernates to enforce that state.
+
+== Pods
+
+Kubernates run containers within _pods_. There can be more than one container per
+pod, but there always be a pod. The unit of scaling in kubernetes is the pod. You
+cannot scale by adding more containers in a pod. You have to add more pods. Pods
+are instantiated, perform their job, and eventually die. The same pod cannot
+be reinstantiated. They are atomic and mortal.
+
+When pods die, they get replaced with pods with different IPs. IP churn is very
+common in a kubernetes cluster, so noone should rely on the IPs. A _service_
+provides a stable abstraction for addressing pods. The service itself is another
+pod with a specia manifest. Services bind to pods with the same _labels_. The
+pods should be healthy.
+
+== Minikube
+
+An easy way to test Kubernetes locally.
+
+.Start minikube
+
+The easiest way to start minikube on Linux is through the _docker_ driver:
+
+    $ sudo minikube --vm-driver=none
+
+- https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux[Install `kubectl`]
+- https://kubernetes.io/docs/tasks/tools/install-minikube/[Install `minikube`]
+- https://kubernetes.io/docs/setup/minikube/[Run `minikube` locally]
