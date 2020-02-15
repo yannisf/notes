@@ -96,6 +96,10 @@ $ sudo cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
 700000
 ```
 
+## Installing Java
+
+Java is not available in the latest Raspian repositories for the Raspberry Pi Zero. To this end a different distribution has to be downloaded. Since Oracle and AdoptOpenJDK do not provide such a build, Zulu is the next best choice. Download it from https://www.azul.com/downloads/zulu-community/?&version=java-8-lts&architecture=arm-32-bit-hf&package=jdk.
+
 ## Sources
 
 - [Official documentation](https://github.com/raspberrypi/documentation/tree/master/configuration)
