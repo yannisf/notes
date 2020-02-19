@@ -68,3 +68,14 @@ To exit your script if you try to use an uninitialised variable add the followin
     set -u
 
 ---
+
+== Exercises
+
+- Print 1000 random numbers in the range 1..1000, sort them, eliminate duplicates
+and take the first 100
+
+[code,bash]
+----
+(for i in {1..1000}; do shuf -i 1-1000 -n1; done;) | sort -nu | head -n100
+----
+

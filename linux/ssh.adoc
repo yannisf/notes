@@ -20,6 +20,16 @@ $ cat id_rsa.pub >> authorized_keys
 [source, bash]
 $ ssh host "command"
 
+== Using advanced configuration
+
+In order to invoke `ssh` with any of its advanced configuration options (these are typically set in `/etc/ssh/ssh_config` or in user configuration per host in `~/.ssh/config`) you can use the `-o` command syntax.
+
+.Example
+When there are any keys in your `.ssh` directory, ssh will try those keys againt the server you are connecting. If there are many keys and none is appropriate you might get a `Too many authentication failures` error. Use the following command to only use password authentication:
+
+[source, bash]
+$ ssh -o PreferredAuthentications=password user@host
+
 === Local port forwarding
 ----
 $ ssh -L 8000:localhost:80 host <1>
