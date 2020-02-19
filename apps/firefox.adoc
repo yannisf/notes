@@ -1,6 +1,6 @@
 == Firefox
 
-. Searching from the awesome bar:
+.Searching from the awesome bar:
 
 * Add ^ to search for matches in your browsing history.
 * Add * to search for matches in your bookmarks.
@@ -10,3 +10,18 @@
 * Add # to search for matches in page titles.
 * Add @ to search for matches in web addresses (URLs).
 * Add $ to search for matches in suggestions.
+
+
+.Web console commands
+
+* **$(selector, element)**: Looks up a CSS selector string selector, returning the first node descended from element that matches. If unspecified, element defaults to document. Equivalent to `document.querySelector()` or calls the `$` function in the page, if it exists.
+* **$$(selector, element)**: Looks up a CSS selector string selector, returning an array of DOM nodes descended from element that match. If unspecified, element defaults to document. This is like for `document.querySelectorAll()`, but returns an array instead of a NodeList.
+* **$0**: The currently-inspected element in the page.
+* **$\_**: Stores the result of the last expression executed in the console's command line. For example, if you type `2+2 <enter>`, then `$_ <enter>`, the console will print `4`.
+* **$x(xpath, element)**: Evaluates the XPath xpath expression in the context of element and returns an array of matching nodes. If unspecified, element defaults to document
+
+=== Resources
+- https://developer.mozilla.org/en-US/docs/Tools/Web_Console/Helpers
+- https://devhints.io/xpath
+
+

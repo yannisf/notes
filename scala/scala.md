@@ -77,6 +77,10 @@ Prepending  command with ~ watches the files.
         (x: Int) => x * x * x
 
 - The type of the parameter can be omitted if can be inferred from the context
-- When an object is created with the same name in the same file with a class, it is called a companion object. (apply method magic)
+- When an object is created with the same name in the same file with a class, it is called a companion object. (`apply` method magic)
+- In pattern matching the case statements use the `unapply` method to deconstruct the object. Returns an `Option`.
 - Traits cannot have parameters
-- Nothing is a subtype of any type
+- `Nothing` is a subtype of any type
+- def in traits can be overriden either with def or val. val can only be overriden with val.
+- If you want to to extract data, create an object and an `unapply` and apply a pattern match.
+- a pattern matching anonymous function is always of type `PartialFunction`
