@@ -53,6 +53,22 @@ alias sshls='function _sshls() { ssh $1 "ls -al";};_sshls'
 ----
 and with `sshls hostname` the output of `ls -al` on the remote host is displayed.
 
+== Scripting
+
+To exit script on error add the following:
+
+    set -e
+
+In case of a command that returned non-true (0), script execution is stopped.
+
+---
+
+To exit your script if you try to use an uninitialised variable add the following:
+
+    set -u
+
+---
+
 == Exercises
 
 - Print 1000 random numbers in the range 1..1000, sort them, eliminate duplicates
@@ -62,5 +78,4 @@ and take the first 100
 ----
 (for i in {1..1000}; do shuf -i 1-1000 -n1; done;) | sort -nu | head -n100
 ----
-
 

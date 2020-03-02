@@ -82,14 +82,17 @@ Key := sourceDirectories | scalaOptions ...
         (x: Int) => x * x * x
 
 - The type of the parameter can be omitted if can be inferred from the context
-- When an object is created with the same name in the same file with a class, it is called a companion object. (apply method magic)
+- When an object is created with the same name in the same file with a class, it is called a companion object. (`apply` method magic)
+- In pattern matching the case statements use the `unapply` method to deconstruct the object. Returns an `Option`.
 - Traits cannot have parameters
+- def in traits can be overriden either with def or val. val can only be overriden with val.
+- If you want to to extract data, create an object and an `unapply` and apply a pattern match.
+- a pattern matching anonymous function is always of type `PartialFunction`
 - Nothing is a subtype of any type
 - In for comprehensions only the first expression needs to be an extraction/iteration (<-).
 - **Structural types** use reflection. Use with care and only when needed.
 - In case classes **copy** helps to create a clone with immutable values overriden
 - : - type ascription, a hint that helps compiler to understand, what type does that expression have
-
 
 # `map`/`flatMap` for `Option`s and `Future`s
 
