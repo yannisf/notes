@@ -13,6 +13,15 @@ An orchestrator for microservices apps that run on containers
 - pods
 - services
 - deployments
+- contexts
+
+
+== Contexts
+
+A context is constituted by:
+- cluster
+- namespace
+- user
 
 == Master
 
@@ -33,6 +42,8 @@ Registers the node with the cluster and then atches _apiserver_, instantiates _p
 - `/healthz`
 - `/pods`
 
+Try this: `http://kubernetes_node:10255/spec`
+
 === Container engine
 
 Inside the pods exist containers, thus a  container engine is required to handle
@@ -45,7 +56,7 @@ containers within a pod share the same IP. Also performs lightweight load balanc
 through services. A service hides multiple pods behind a single network address.
 
 Kubernetes is given a declarative manifest file describing the cluster desired
-state. Then it is up to kubernates to enforce that state.
+state. Then it is up to kubernetes to enforce that state.
 
 == Pods
 
@@ -74,3 +85,25 @@ The easiest way to start minikube on Linux is through the _docker_ driver:
 - https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux[Install `kubectl`]
 - https://kubernetes.io/docs/tasks/tools/install-minikube/[Install `minikube`]
 - https://kubernetes.io/docs/setup/minikube/[Run `minikube` locally]
+
+.Use minikube docker registry
+
+Minikube by default cannot see local docker repository. So create pods from localy created docker images you will have to create them once more under the minikube registry:
+
+    $ eval $(minikube docker-env)
+    $ docker build -t my-image .
+
+.Addons
+
+    $ minikube addons list
+    $ minikube addons disable dashboard
+    $ minikube addons enable heapster
+    $ minikube open heapster
+
+- Metrics server allows `top` to work
+
+.Dashboard
+
+    $ minikube open dashboard
+
+    
