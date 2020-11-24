@@ -24,16 +24,16 @@ or
 
 #### Create table
 
-CREATE TABLE test_tbl (
-    id int,
-    english text,
-    symbol text, 
-    PRIMARY KEY (id)
-);
-
+    CREATE TABLE test_tbl (
+        id int,
+        english text,
+        symbol text, 
+        PRIMARY KEY (id)
+    );
+---
 #### Insert data
 
-
+    INSERT INTO test_tbl (id,english,symbol) VALUES (1,'Greece','GR');
 
 #### Show tables in keyspace
     SELECT columnfamily_name FROM system.schema_columnfamilies WHERE keyspace_name = 'awesome';
