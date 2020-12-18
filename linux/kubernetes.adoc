@@ -80,7 +80,8 @@ An easy way to test Kubernetes locally.
 
 The easiest way to start minikube on Linux is through the _docker_ driver:
 
-    $ sudo minikube start --vm-driver=none
+
+    $ sudo minikube --vm-driver=docker
 
 - https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux[Install `kubectl`]
 - https://kubernetes.io/docs/tasks/tools/install-minikube/[Install `minikube`]
@@ -105,5 +106,3 @@ Minikube by default cannot see local docker repository. So to create pods from l
 .Dashboard
 
     $ minikube open dashboard
-
-    

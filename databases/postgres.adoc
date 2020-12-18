@@ -96,6 +96,11 @@ pg_restore -h localhost -U registry -d registry_qa -C -W registry.tar
 pg_restore -h localhost -d registry_test -U postgres registry-20161113.tar
 ----
 
+=== Clone
+----
+pg_dump -h <source_host> -U <source_user> <source_database> | PGPASSWORD=<password> psql -U <target_user> -d <target_database>
+----
+
 === Miscellaneous
 
 .Find database version
