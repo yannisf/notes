@@ -29,3 +29,11 @@ signed by the CA created previously.
 - Use the CA key created in the previous step to sign the CSR
 - Import the signed CSR in the keystore
 - Import this keystore in the browser's
+
+### Points to take into account when creating server side certificates
+
+* Select adequate key size. When creating RSA key, use at least 2048 bits.
+* Select a strong hashing algorithm. At least SHA256.
+* Use at most 2 years expiration for the certificate.
+* Use SAN and include there all valid DNS/IP. CN is not adequate.
+* ExtendedKeyUsage should note only Web server TLS
