@@ -49,7 +49,7 @@ Then secure the configuration file like so:
 
 To test the service sent a message:
 
-    echo "Hello" | mssmtp <email>
+    echo "Hello" | msmtp <email>
 
 ## Send email
 

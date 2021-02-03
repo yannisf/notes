@@ -29,3 +29,8 @@ signed by the CA created previously.
 - Use the CA key created in the previous step to sign the CSR
 - Import the signed CSR in the keystore
 - Import this keystore in the browser's
+
+## Trust a CA systemwide in Ubuntu
+
+- `sudo cp myca.crt /usr/local/share/ca-certificates/`
+- `sudo update-ca-certificates`

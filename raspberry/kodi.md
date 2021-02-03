@@ -34,6 +34,12 @@ Add the following line:
 
     @reboot kodi --standalone
 
+## Enable SSL remote control
+
+In order to enable SSL remote control you will have to generate a keypair, generate a CSR and have it signed by a CA.
+Then export the private key and the full certificate chain, name them `server.key` and `server.pem` respectively
+and copy them into `~/.kodi/userdata/`.
+
 ## Considerations
 
 Having a lot of services running on the same host,
