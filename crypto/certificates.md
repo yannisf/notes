@@ -34,3 +34,10 @@ signed by the CA created previously.
 
 - `sudo cp myca.crt /usr/local/share/ca-certificates/`
 - `sudo update-ca-certificates`
+### Points to take into account when creating server side certificates
+
+* Select adequate key size. When creating RSA key, use at least 2048 bits.
+* Select a strong hashing algorithm. At least SHA256.
+* Use at most 2 years expiration for the certificate.
+* Use SAN and include there all valid DNS/IP. CN is not adequate.
+* ExtendedKeyUsage should note only Web server TLS
