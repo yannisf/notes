@@ -77,6 +77,10 @@ Disabling HDMI reduces power consumption. If you don't needed add the following 
 hdmi_blanking=2
 ```
 
+**Update**: It seems that adding the following in crontab is more relieable:
+
+    @reboot /usr/bin/tvservice -o
+
 **Source**: https://raspberrypi.stackexchange.com/questions/79728/keep-hdmi-off-on-boot*
 
 ### Underclock CPU

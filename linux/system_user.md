@@ -6,3 +6,7 @@ The following recipe creates a system user. System users are typically unprivile
     $ sudo usermod -s /bin/false <user>
 
 The first command creates a user without a home directory or password. The second removes the shell from the user.
+ 
+ In case you need a home as well try the following:
+ 
+    $ sudo useradd -r kodi -m -d /var/<user>
