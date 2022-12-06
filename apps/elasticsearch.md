@@ -7,7 +7,7 @@ https://hub.docker.com/_/elasticsearch/
 
 To ensure that you do not run into conflicts, it is advisable to ensure that fields with the same name are mapped in the same way in every type in an index.
 
-Although you can add to an existing mapping, you can’t change existing field mappings. If a mapping already exists for a field, data from that field has probably been indexed. If you were to change the field mapping, the indexed data would be wrong and would not be properly searchable.
+Although you can add to an existing mapping, you canï¿½t change existing field mappings. If a mapping already exists for a field, data from that field has probably been indexed. If you were to change the field mapping, the indexed data would be wrong and would not be properly searchable.
 
 ### View mapping
 	GET /gb/_mapping/tweet
@@ -35,7 +35,7 @@ It is often useful to index the same field in different ways for different purpo
 * The full document is available directly from the search results need for a separate round-trip to fetch the document from another data store. 
 * Partial update requests will not function without the _source field. 
 * When your mapping changes and you need to reindex your data, you can do so directly from Elasticsearch instead of having to retrieve all of your documents from another (usually slower) data store. 
-*  Individual fields can be extracted from the _source field and returned in get or search requests when you don’t need to see the whole document. 
+*  Individual fields can be extracted from the _source field and returned in get or search requests when you donï¿½t need to see the whole document. 
 * It is easier to debug queries, because you can see exactly what each document contains, rather than having to guess their contents from a list of IDs. 
 
 In Elasticsearch, setting individual document fields to be stored is usually a false optimization. The whole document is already stored as the _source field. It is almost always better to just extract the fields that you need by using the _source parameter.
@@ -51,3 +51,13 @@ Remember that the _all field is just an analyzed string field. It uses the defau
 
 ## Reindex
 To reindex all of the documents from the old index efficiently, use scroll to retrieve batches of documents from the old index, and the bulk API to push them into the new index.
+
+## SPECIAL CASES TO CONSIDER
+
+### On `should`
+
+The should clause of the bool query is for optional search criteria. Let's say you are looking for hotels and would prefer for the hotel to have a swimming pool, but you would also like to see hotels without a swimming pool in the search results, then the query for swimming pool would be in the should clause. Elasticsearch will give the documents that match more should queries a higher score, so those documents will be ranked higher in the search results.
+
+When you only have a should clause, then at least one of the should clauses must match for a document to be considered a hit.
+
+When you combine a should clause with a filter than all should clauses are optional, so even documents that only match the filter will be returned. You can change that behavior by setting minimum_should_match on the bool query. You could set that for example to 1 to make it mandatory for at least one should clause to match. The docs have an example of that: https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-bool-query.html
