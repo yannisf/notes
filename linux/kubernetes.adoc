@@ -87,6 +87,24 @@ The easiest way to start minikube on Linux is through the _docker_ driver:
 - https://kubernetes.io/docs/tasks/tools/install-minikube/[Install `minikube`]
 - https://kubernetes.io/docs/setup/minikube/[Run `minikube` locally]
 
+
+.Get the exposed service (nodeport)
+
+    $ minikube service hello-minikube --url
+    http://192.168.49.2:31153
+
+
+.Get the exposed service (loadbalander)
+
+    $ minikube tunnel
+
+Then find the external ip of the service you are interest in:
+
+    $ kubectl get services diceware-service -o jsonpath='{.status.loadBalancer.ingress[].ip}'
+    
+
+and access the service through the exposed port eg `http://<ip_found_above>:8080/api`
+
 .Use minikube docker registry
 
 Minikube by default cannot see local docker repository. So to create pods from localy created docker images you will have to create them once more under the minikube registry:
@@ -106,3 +124,7 @@ Minikube by default cannot see local docker repository. So to create pods from l
 .Dashboard
 
     $ minikube open dashboard
+
+.Resources
+* https://minikube.sigs.k8s.io/docs/start/
+* https://minikube.sigs.k8s.io/docs/handbook/accessing/#loadbalancer-access
