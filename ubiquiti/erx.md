@@ -5,11 +5,12 @@
 1. Copy `/config/config.boot` to e.g. `/config/updated.config.boot`
 2. Perform any changes you might want to `/config/updated.config.boot`
 3. Load, review and persist the updated configuration like so:
+   1. `configure`
    1. `load updated.config.boot`
-   2. `compare`
-   3. `commit`
-   4. `save`
-   5. `exit`
+   1. `compare`
+   1. `commit`
+   1. `save`
+   1. `exit`
 
 ## Wireguard and firmware upgrades
 
