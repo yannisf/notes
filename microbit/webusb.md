@@ -9,6 +9,13 @@ I had trouble connecting to Microbit from Linux. I found out that in order to su
 
 ## Permissions in device
 
+### Group membership
+
+Typically, microbit is loaded as a device of the form `/dev/ttyACM0` or `/dev/ttyUSB0`. These devices are typically created with `660` permissions, so a simple user might not have access to them. Nevertheless, if you can get membership on the group you will be able to work with the device, as the middle `6` denotes that users of the group have full access. The group is usually the `dialout` or the `tty`. You can just `ls -l /dev/ttyACM0` to find out the actual one. Then just `sudo usermod -aG dialout your_username`, and log out and in again (or better restart).
+
+### udev rule
+
+If the above does not work you might want to bring out the big guns and intevene on the udev subsystem using a rule. 
 The device is mounted on modern linux systems through the `udev` device manager. In order to ensure appropriate permissions add the following rule in `/etc/udev/rules.d/` directory in a file named `microbit.rules`
 
 ```simple
