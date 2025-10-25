@@ -68,3 +68,13 @@ Send email, possibly with attachments using the `mail` command:
 Nevertheless, if all you want is to send one liner messages it is far more easier to do this throught `curl` as shown below:
 
     echo "This is the message" | curl --mail-rcpt user@example.com -T - smtps://user:password@smtp.gmail.com:465
+
+Or in modern more demanding `STARTTLS` smtp:
+
+    echo -e "This is the message" | curl \
+      --mail-rcpt "user@example.com" \
+      --user "smtp_user@example.com:password" \
+      --mail-from "smtp_user@example.com" \
+      --url "smtp://smtp.example.com:587" \
+      --ssl-reqd \
+      -T - 
